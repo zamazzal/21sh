@@ -6,16 +6,24 @@
 /*   By: aihya <aihya@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 16:02:45 by aihya             #+#    #+#             */
-/*   Updated: 2019/07/11 17:34:50 by aihya            ###   ########.fr       */
+/*   Updated: 2019/07/11 20:07:57 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "libft.h"
+#include "mysh.h"
 
-#define SQ 39
-#define DQ 34
-#define BS 92
+void			ft_freetable(char **array)
+{
+	int i;
+
+	i = 0;
+	if (*array)
+	{
+		while (array[i] != NULL)
+			ft_strdel(&array[i++]);
+		free(array);
+	}
+}
 
 int checkbackslash(char *ptr, int i)
 {
@@ -84,6 +92,7 @@ char **putcontent(char *ptr, int len)
 {
 	int i;
 	int x;
+	int chrlen;
 	char **cmds;
 
 	i = 0;
@@ -95,6 +104,9 @@ char **putcontent(char *ptr, int len)
 			cmds[i++] = ft_strsub(ptr, 0, x);
 		ptr += x + 1;
 	}
+	chrlen = ft_strlen(ptr);
+	if (chrlen > 0)
+		cmds[i++] = ft_strsub(ptr, 0, chrlen);
 	cmds[i] = NULL;
 	return (cmds);
 }
@@ -104,8 +116,33 @@ char **ft_cmdsplit(char *ptr)
 	int len;
 
 	len = ft_nbrsemicol(ptr);
-	printf("%d\n", len);
 	return (putcontent(ptr, len));
+}
+
+int doublesemicol(char *cmd)
+{
+	int i;
+
+	i = 0;
+	while (cmd[i] != '\0')
+	{
+		if (cmd[i] == ';')
+		{
+			if (cmd[i + 1] && cmd[i + 1] == ';')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int parseerror(char *cmd)
+{
+	if (doublesemicol(cmd))
+		ft_putendl_fd("21sh : parse error near `;;'", 2);
+	else
+		return (0);
+	return (1);
 }
 
 int main(int argc, char **argv)
@@ -114,8 +151,12 @@ int main(int argc, char **argv)
 
 	if (argc > 1)
 	{
-		cmds = ft_cmdsplit(argv[1]);
+		if (parseerror(argv[1]))
+			return (1);
+		if (!(cmds = ft_cmdsplit(argv[1])))
+			return (1);
 		ft_puttables(cmds);
+		ft_freetable(cmds);
 	}
 	return (0);
 }
