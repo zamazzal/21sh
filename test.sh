@@ -1,1 +1,1 @@
-gcc main.c -I includes -I libft libft/libft.a -o 21sh
+gcc main.c -I includes -I libft libft/libft.a srcs/*/* -o 21sh

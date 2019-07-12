@@ -1,38 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mysh.h                                             :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/11 19:48:06 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/11 20:14:48 by zamazzal         ###   ########.fr       */
+/*   Created: 2019/07/12 11:47:52 by zamazzal          #+#    #+#             */
+/*   Updated: 2019/07/12 11:48:16 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MYSH_H
-# define MYSH_H
+#include "mysh.h"
 
-# include <stdio.h>
-# include "libft.h"
-
-typedef struct	s_subcmds
+void			ft_freetable(char **array)
 {
-	char				*cmd;
-	struct s_subcmds	*next;
-}				t_subcmds;
+	int i;
 
-typedef	struct	s_cmds
-{
-	t_subcmds		*cmds;
-	struct s_cmds	*next;
-}				t_cmds;
-
-# define SQ 39
-# define DQ 34
-# define BS 92
-
-char			**ft_cmdsplit(char *ptr, int c);
-int				parseerror(char *cmd);
-void			ft_freetable(char **array);
-#endif
+	i = 0;
+	if (*array)
+	{
+		while (array[i] != NULL)
+			ft_strdel(&array[i++]);
+		free(array);
+	}
+}
