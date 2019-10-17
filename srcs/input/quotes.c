@@ -34,7 +34,7 @@ int		ft_checkquote(char *cmd)
 	return (0);
 }
 
-char	*ft_closequotes(char *cmd)
+char	*ft_closequotes(char *cmd, char **history)
 {
 	int		r;
 	char	*input;
@@ -48,7 +48,7 @@ char	*ft_closequotes(char *cmd)
 		else if (r == BQ)
 			ft_putstr("bquote> ");
 		g_input_type = r;
-		if (!(input = readline2()))
+		if (!(input = readline2(history)))
 			continue ;
 		cmd = ft_strjoin_lite(cmd, input);
 		ft_strdel(&input);

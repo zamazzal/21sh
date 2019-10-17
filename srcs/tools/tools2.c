@@ -16,9 +16,7 @@ int		ft_straddchr(char *str, char c)
 {
 	int i;
 
-	i = 0;
-	while (str[i] != '\0')
-		i++;
+	i = ft_strlen(str);
 	str[i++] = c;
 	str[i] = '\0';
 	return (1);

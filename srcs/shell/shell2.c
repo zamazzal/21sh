@@ -12,7 +12,7 @@
 
 #include "mysh.h"
 
-int		ft_checknoprint(int key, int pos)
+int		ft_checknoprint(int key, int pos, char **history, int *i)
 {
 	if (key == RIGHT)
 	{
@@ -20,15 +20,32 @@ int		ft_checknoprint(int key, int pos)
 			return (pos + 1);
 	}
 	if (key == LEFT)
-	{
 		return ((pos - 1 >= -1) ? (pos - 1) : -1);
-	}
 	if (key == BACKSPACE)
 	{
 		if (pos >= 0)
 		{
 			ft_strcpy(&g_input[pos], &g_input[pos + 1]);
 			return ((pos - 1 >= -1) ? (pos - 1) : -1);
+		}
+	}
+	if (key == UP)
+	{
+		if (*i >= 0)
+		{
+			ft_strcpy(g_input, history[*i]);
+			pos = ft_strlen(g_input) - 1;
+			if (*i > 0)
+				(*i) = (*i) - 1;
+		}
+	}
+	if (key == DOWN)
+	{
+		if (history[*i + 1])
+		{
+			(*i) = (*i) + 1;
+			ft_strcpy(g_input, history[*i]);
+			pos = ft_strlen(g_input) - 1;
 		}
 	}
 	return (pos);
@@ -43,10 +60,8 @@ char	*ft_prepareinput(void)
 	return (input);
 }
 
-void	ft_endinput(cmds, input)
-	char **cmds;
-	char *input;
-	{
+void	ft_endinput(char **cmds, char *input)
+{
 	ft_freetable(&cmds);
 	ft_strdel(&input);
-	}
+}

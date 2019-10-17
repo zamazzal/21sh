@@ -46,7 +46,7 @@ int					ft_checkcmdform(char *cmd)
 	return (0);
 }
 
-char				*makecmdclear(char *cmd)
+char				*makecmdclear(char *cmd, char **history)
 {
 	int r;
 
@@ -54,11 +54,11 @@ char				*makecmdclear(char *cmd)
 	while ((r = ft_checkcmdform(cmd)))
 	{
 		if (r == 1)
-			cmd = ft_closequotes(cmd);
+			cmd = ft_closequotes(cmd, history);
 		if (r == 2)
-			cmd = ft_closepipe(cmd);
+			cmd = ft_closepipe(cmd, history);
 		if (r == 3)
-			cmd = ft_endbackslash(cmd);
+			cmd = ft_endbackslash(cmd, history);
 	}
 	return (cmd);
 }

@@ -32,7 +32,7 @@ int				ft_checkbackslash(char *cmd)
 	return (1);
 }
 
-char			*ft_endbackslash(char *cmd)
+char			*ft_endbackslash(char *cmd, char **history)
 {
 	int		r;
 	char	*input;
@@ -42,7 +42,7 @@ char			*ft_endbackslash(char *cmd)
 	{
 		ft_putstr("> ");
 		g_input_type = 10;
-		if (!(input = readline()))
+		if (!(input = readline(history)))
 			continue ;
 		len = ft_strlen(cmd);
 		if (len > 1)

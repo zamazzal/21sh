@@ -53,9 +53,11 @@ void	ft_term_prepare(int mode)
 	if (mode)
 	{
 		ft_term_canon();
+		ft_term_echo();
 	}
 	else
 	{
 		ft_term_nocanon();
+		ft_term_noecho();
 	}
 }

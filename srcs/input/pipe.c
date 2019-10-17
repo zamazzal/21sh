@@ -41,7 +41,7 @@ int		ft_checkpipe(char *cmd)
 	return (0);
 }
 
-char	*ft_closepipe(char *cmd)
+char	*ft_closepipe(char *cmd, char **history)
 {
 	int		r;
 	char	*input;
@@ -51,7 +51,7 @@ char	*ft_closepipe(char *cmd)
 	{
 		ft_putnstr("pipe> ", g_pipe);
 		g_input_type = 20;
-		if (!(input = readline()))
+		if (!(input = readline(history)))
 			continue ;
 		g_pipe++;
 		input = ft_removeantin(input);
