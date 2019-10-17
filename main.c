@@ -187,11 +187,9 @@ int			ft_putcmds(char **cmd)
 
 static char		**creation(char **table)
 {
-	int		i;
 	char	**new;
 
 	g_pid = 0;
-	i = 0;
 	new = ft_tabdup(table);
 	return (new);
 }

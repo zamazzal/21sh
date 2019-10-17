@@ -57,6 +57,22 @@ char		*readline2(char **history)
 	return (g_input);
 }
 
+void		ft_showcmd(int key, int pos, char *cmd)
+{
+	if (key == BACKSPACE && pos < -1)
+		return ;
+	ft_putterm("cr");
+	ft_putterm("cd");
+	ft_prompt();
+	ft_putstr(cmd);
+}
+
+void		ft_termmanager(int key, int pos, char *g_input)
+{
+	if (key != LEFT && key != RIGHT)
+		ft_showcmd(key, pos, g_input);
+}
+
 char		*readline(char **history)
 {
 	int	key;
@@ -72,8 +88,9 @@ char		*readline(char **history)
 			pos += ft_straddchrinpos(key, pos + 1);
 		else
 			pos = ft_checknoprint(key, pos, history, &i);
-		ft_putstr(g_input);
+		ft_termmanager(key, pos, g_input);
 	}
+	ft_putchar('\n');
 	if (key == -1 || !ft_strisprint(g_input))
 	{
 		if (key == -1)

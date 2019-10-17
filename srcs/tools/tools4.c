@@ -112,3 +112,8 @@ void	ft_putintab(char ***a_chain, char *entry)
 	ft_freetable(a_chain);
 	*a_chain = new;
 }
+
+int		ft_putchr(int c)
+{
+	return (write(2, &c, 1));
+}

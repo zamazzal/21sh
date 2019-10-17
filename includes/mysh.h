@@ -46,17 +46,12 @@
 */
 
 # define ENTRE 10
-# define SPACE 32
-# define CTRLA 1
-# define CTRLU 21
 # define RIGHT 4414235
 # define LEFT 4479771
 # define UP 4283163
 # define DOWN 4348699
 # define ESC 27
 # define BACKSPACE 127
-# define CTRLX 24
-# define DELETE 2117294875
 
 /*
 **		Colors
@@ -110,10 +105,10 @@ char			*ft_prepareinput(void);
 void			ft_endinput(char **cmds, char *input);
 char			**createcmds(char *input);
 void			ft_shell(void);
-char			*readline(void);
-char			*readline2(void);
+char			*readline(char **history);
+char			*readline2(char **history);
 int				ft_putcmds(char **cmd);
-int				ft_checknoprint(int key, int pos);
+int				ft_checknoprint(int key, int pos, char **history, int *i);
 
 /*
 **		input
@@ -121,10 +116,10 @@ int				ft_checknoprint(int key, int pos);
 */
 
 int				checkbackslash(char *ptr, int i);
-char			*makecmdclear(char *cmd);
-char			*ft_endbackslash(char *cmd);
-char			*ft_closepipe(char *cmd);
-char			*ft_closequotes(char *cmd);
+char			*makecmdclear(char *cmd, char **history);
+char			*ft_endbackslash(char *cmd, char **history);
+char			*ft_closepipe(char *cmd, char **history);
+char			*ft_closequotes(char *cmd, char **history);
 int				ft_checkquote(char *cmd);
 int				ft_checkbackslash(char *cmd);
 int				ft_checkpipe(char *cmd);
@@ -187,6 +182,8 @@ void			ft_term_canon(void);
 void			ft_term_nocanon(void);
 void			ft_term_echo(void);
 void			ft_term_noecho(void);
+int				ft_putchr(int c);
+int				ft_putterm(char *t);
 
 /*
 **		signals
@@ -228,5 +225,6 @@ int				quote_end(char *cmd, int start);
 char			*ft_strojoin(char **s1, char *s2, int overwrite);
 void			ft_putintab(char ***a_chain, char *entry);
 int				ft_skipspaces(char *str);
+char			**ft_addtotab(char **tabl, char *str);
 
 #endif

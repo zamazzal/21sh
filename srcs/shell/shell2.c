@@ -17,10 +17,24 @@ int		ft_checknoprint(int key, int pos, char **history, int *i)
 	if (key == RIGHT)
 	{
 		if (pos + 1 < (int)ft_strlen(g_input))
+		{
+			ft_putterm("nd");
+			printf("c : %c\n", g_input[pos]);
 			return (pos + 1);
+		}
 	}
 	if (key == LEFT)
-		return ((pos - 1 >= -1) ? (pos - 1) : -1);
+	{
+		if (pos - 1 >= -1)
+		{
+			ft_putterm("le");
+			return (pos - 1);
+		}
+		else
+		{
+			return (-1);
+		}
+	}
 	if (key == BACKSPACE)
 	{
 		if (pos >= 0)
