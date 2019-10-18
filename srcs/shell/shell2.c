@@ -19,7 +19,6 @@ int		ft_checknoprint(int key, int pos, char **history, int *i)
 		if (pos + 1 < (int)ft_strlen(g_input))
 		{
 			ft_putterm("nd");
-			printf("c : %c\n", g_input[pos]);
 			return (pos + 1);
 		}
 	}
@@ -40,6 +39,7 @@ int		ft_checknoprint(int key, int pos, char **history, int *i)
 		if (pos >= 0)
 		{
 			ft_strcpy(&g_input[pos], &g_input[pos + 1]);
+			ft_readshow(g_input);
 			return ((pos - 1 >= -1) ? (pos - 1) : -1);
 		}
 	}

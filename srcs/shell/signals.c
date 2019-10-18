@@ -34,3 +34,11 @@ void		ft_signal(int x)
 	if (g_pid == 1)
 		ft_putchar('\n');
 }
+
+void		ft_winch(int x)
+{
+	if (x == SIGWINCH && g_pid == 0)
+	{
+		ft_readshow(g_input);
+	}
+}

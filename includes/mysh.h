@@ -28,6 +28,7 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+# include <sys/ioctl.h>
 
 /*
 **		Indexes of Builtins
@@ -82,6 +83,12 @@ typedef struct	s_info
 	int			mode;
 }				t_info;
 
+typedef struct	s_cursor
+{
+	int			x;
+	int			y;
+}				t_cursor;
+
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
 char			**g_environ;
@@ -95,6 +102,7 @@ int				g_pipe;
 # define BQ 96
 # define BS 92
 # define BUFFER_SIZE 1024
+# define PROMPTLINE 6
 
 /*
 **		shell
@@ -184,6 +192,8 @@ void			ft_term_echo(void);
 void			ft_term_noecho(void);
 int				ft_putchr(int c);
 int				ft_putterm(char *t);
+void            ft_cursmove(char c, int i);
+void			ft_readshow(char *cmd);
 
 /*
 **		signals
@@ -191,6 +201,7 @@ int				ft_putterm(char *t);
 */
 
 void			ft_signal(int x);
+void			ft_winch(int x);
 
 /*
 **		Messages

@@ -14,29 +14,10 @@
 
 void	ft_prompt(void)
 {
-	char host[1024];
 	char *user;
-	char *pwd;
 
-	host[1023] = '\0';
 	user = ft_getenv("USER");
-	gethostname(host, 1023);
-	pwd = ft_getenv("PWD");
-	ft_putstr(GREEN);
-	if (user)
-	{
-		ft_putstr(user);
-		ft_putchar('@');
-	}
-	ft_putstr(host);
-	if (pwd)
-	{
-		ft_putstr(DEFAULT);
-		ft_putchar(':');
-		ft_putstr(BLUE);
-		ft_putstr(pwd);
-	}
-	ft_putstr(DEFAULT);
+	ft_putstr("mysh");
 	ft_strequ(user, "root") ? ft_putstr("# ") : ft_putstr("$ ");
 }
 

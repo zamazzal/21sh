@@ -1,0 +1,17 @@
+ho    Cursor home
+cr    Carriage return
+
+nd    Cursor right one character
+le    Cursor left one character
+
+do    Cursor down one line
+up    Cursor up one line
+
+
+sc    Save cursor position
+rc    Restore saved cursor position
+
+
+
+
+ce    Clear to end of line

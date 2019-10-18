@@ -57,20 +57,69 @@ char		*readline2(char **history)
 	return (g_input);
 }
 
-void		ft_showcmd(int key, int pos, char *cmd)
+struct winsize	ft_winsize(void)
 {
-	if (key == BACKSPACE && pos < -1)
-		return ;
-	ft_putterm("cr");
-	ft_putterm("cd");
-	ft_prompt();
-	ft_putstr(cmd);
+	struct winsize ts;
+
+    ioctl(0, TIOCGWINSZ, &ts);
+	return (ts);
 }
 
-void		ft_termmanager(int key, int pos, char *g_input)
+void		ft_clearlines(int l)
 {
-	if (key != LEFT && key != RIGHT)
-		ft_showcmd(key, pos, g_input);
+	int i;
+
+	i = 1;
+	ft_putterm("cr");
+	ft_putterm("ce");
+	while (i <= l)
+	{
+		ft_cursmove('u', 1);
+		ft_putterm("cr");
+		ft_putterm("ce");
+		i++;
+	}
+}
+
+void		ft_showstr(char *str, int col)
+{
+	int i;
+	int x;
+
+	i = 0;
+	x = 6;
+	while (str[i] != '\0')
+	{
+		ft_putchar(str[i]);
+		x++;
+		if (x == col)
+		{
+			x = 0;
+			ft_cursmove('d', 1);
+			ft_putterm("cr");
+		}
+		i++;
+	}
+}
+
+void		ft_readshow(char *cmd)
+{
+	struct winsize ts;
+	int len;
+	int x;
+
+	ts = ft_winsize();
+	len = ft_strlen(cmd);
+	x = (len + PROMPTLINE + ((len + PROMPTLINE) / (ts.ws_col))) / (ts.ws_col);
+	ft_clearlines(x);
+	ft_prompt();
+	ft_showstr(cmd, ts.ws_col - 1);
+}
+
+void		ft_termmanager(int key, char *g_input)
+{
+	if (key != LEFT && key != RIGHT && key != BACKSPACE)
+		ft_readshow(g_input);
 }
 
 char		*readline(char **history)
@@ -88,7 +137,7 @@ char		*readline(char **history)
 			pos += ft_straddchrinpos(key, pos + 1);
 		else
 			pos = ft_checknoprint(key, pos, history, &i);
-		ft_termmanager(key, pos, g_input);
+		ft_termmanager(key, g_input);
 	}
 	ft_putchar('\n');
 	if (key == -1 || !ft_strisprint(g_input))
