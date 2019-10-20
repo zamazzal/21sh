@@ -87,6 +87,7 @@ typedef struct	s_cursor
 {
 	int			x;
 	int			y;
+	int			pos;
 }				t_cursor;
 
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
@@ -96,6 +97,7 @@ int				g_pid;
 int				g_input_type;
 char			*g_input;
 int				g_pipe;
+t_cursor		g_cursor;
 
 # define SQ 39
 # define DQ 34
@@ -116,7 +118,7 @@ void			ft_shell(void);
 char			*readline(char **history);
 char			*readline2(char **history);
 int				ft_putcmds(char **cmd);
-int				ft_checknoprint(int key, int pos, char **history, int *i);
+t_cursor		ft_checknoprint(int key, t_cursor cursor, char **history, int *i);
 
 /*
 **		input
@@ -193,7 +195,10 @@ void			ft_term_noecho(void);
 int				ft_putchr(int c);
 int				ft_putterm(char *t);
 void            ft_cursmove(char c, int i);
-void			ft_readshow(char *cmd);
+int				ft_readshow(char *cmd);
+void			ft_termmanager(char *g_input, t_cursor g_cursor);
+t_cursor		ft_curright(t_cursor cur, int i);
+t_cursor		ft_curleft(t_cursor cur, int i);
 
 /*
 **		signals
@@ -230,7 +235,7 @@ char			*ft_strjoin_lite(char *s1, char const *s2);
 char			*ft_strsub_lite(char *s, unsigned int start, size_t len);
 int				ft_tablen(char **array);
 int				ft_straddchr(char *str, char c);
-int				ft_straddchrinpos(char c, int pos);
+t_cursor		ft_straddchrinpos(char c, t_cursor cursor);
 char			*ft_strappend(char **a_s1, char c, int overwrite);
 int				quote_end(char *cmd, int start);
 char			*ft_strojoin(char **s1, char *s2, int overwrite);

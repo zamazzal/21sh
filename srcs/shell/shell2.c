@@ -12,43 +12,42 @@
 
 #include "mysh.h"
 
-int		ft_checknoprint(int key, int pos, char **history, int *i)
+t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	if (key == RIGHT)
 	{
-		if (pos + 1 < (int)ft_strlen(g_input))
+		if (cursor.pos < (int)ft_strlen(g_input))
 		{
-			ft_putterm("nd");
-			return (pos + 1);
+			cursor = ft_curright(cursor, 1);
+			cursor.pos++;
 		}
+		return (cursor);
 	}
 	if (key == LEFT)
 	{
-		if (pos - 1 >= -1)
+		if (cursor.pos - 1 >= 0)
 		{
-			ft_putterm("le");
-			return (pos - 1);
+			cursor = ft_curleft(cursor, 1);
+			cursor.pos--;
 		}
-		else
-		{
-			return (-1);
-		}
+		return (cursor);
 	}
 	if (key == BACKSPACE)
 	{
-		if (pos >= 0)
+		if (cursor.pos >= 0)
 		{
-			ft_strcpy(&g_input[pos], &g_input[pos + 1]);
-			ft_readshow(g_input);
-			return ((pos - 1 >= -1) ? (pos - 1) : -1);
+			ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
+			cursor.pos = (cursor.pos - 1 >= 0) ? (cursor.pos - 1) : 0;
+			cursor = ft_curleft(cursor, 1);
 		}
+		return (cursor);
 	}
 	if (key == UP)
 	{
 		if (*i >= 0)
 		{
 			ft_strcpy(g_input, history[*i]);
-			pos = ft_strlen(g_input) - 1;
+			cursor.pos = ft_strlen(g_input) - 1;
 			if (*i > 0)
 				(*i) = (*i) - 1;
 		}
@@ -59,10 +58,12 @@ int		ft_checknoprint(int key, int pos, char **history, int *i)
 		{
 			(*i) = (*i) + 1;
 			ft_strcpy(g_input, history[*i]);
-			pos = ft_strlen(g_input) - 1;
+			cursor.pos = ft_strlen(g_input) - 1;
 		}
+		else
+			ft_strclr(g_input);
 	}
-	return (pos);
+	return (cursor);
 }
 
 char	*ft_prepareinput(void)

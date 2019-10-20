@@ -39,6 +39,6 @@ void		ft_winch(int x)
 {
 	if (x == SIGWINCH && g_pid == 0)
 	{
-		ft_readshow(g_input);
+		ft_termmanager(g_input, g_cursor);
 	}
 }

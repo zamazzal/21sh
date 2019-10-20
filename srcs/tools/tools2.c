@@ -22,20 +22,22 @@ int		ft_straddchr(char *str, char c)
 	return (1);
 }
 
-int		ft_straddchrinpos(char c, int pos)
+t_cursor	ft_straddchrinpos(char c, t_cursor cursor)
 {
 	char *tmp;
 	char *tmp2;
 
 	tmp = ft_strdup(g_input);
-	tmp2 = ft_strsub(tmp, 0, pos);
+	tmp2 = ft_strsub(tmp, 0, cursor.pos);
 	ft_strclr(g_input);
 	ft_strcpy(g_input, tmp2);
 	ft_straddchr(g_input, c);
-	ft_strcat(g_input, &tmp[pos]);
+	ft_strcat(g_input, &tmp[cursor.pos]);
 	free(tmp);
 	free(tmp2);
-	return (1);
+	cursor.pos += 1;
+	cursor = ft_curright(cursor, 1);
+	return (cursor);
 }
 
 void	double_free(char *dead1, char **dead2)
