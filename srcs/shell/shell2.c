@@ -47,7 +47,9 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		if (*i >= 0)
 		{
 			ft_strcpy(g_input, history[*i]);
-			cursor.pos = ft_strlen(g_input) - 1;
+			cursor = ft_defaultcursor(&cursor);
+			cursor.pos = ft_strlen(g_input);
+			cursor = ft_curright(cursor, cursor.pos);
 			if (*i > 0)
 				(*i) = (*i) - 1;
 		}
@@ -58,10 +60,25 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		{
 			(*i) = (*i) + 1;
 			ft_strcpy(g_input, history[*i]);
-			cursor.pos = ft_strlen(g_input) - 1;
+			cursor = ft_defaultcursor(&cursor);
+			cursor.pos = ft_strlen(g_input);
+			cursor = ft_curright(cursor, cursor.pos);
 		}
 		else
+		{
 			ft_strclr(g_input);
+			cursor = ft_defaultcursor(&cursor);
+		}
+	}
+	if (key == HOME)
+	{
+		cursor = ft_defaultcursor(&cursor);
+	}
+	if (key == END)
+	{
+		cursor = ft_defaultcursor(&cursor);
+		cursor.pos = ft_strlen(g_input);
+		cursor = ft_curright(cursor, cursor.pos);
 	}
 	return (cursor);
 }

@@ -17,6 +17,7 @@ void		ft_signal(int x)
 	if (x == SIGINT && g_pid == 0)
 	{
 		ft_putchar('\n');
+		g_cursor = ft_defaultcursor(&g_cursor);
 		if (g_input_type == 1)
 			ft_prompt();
 		else if (g_input_type == 10)
@@ -30,6 +31,7 @@ void		ft_signal(int x)
 		else if (g_input_type == 20)
 			ft_putnstr("pipe> ", g_pipe);
 		ft_strclr(g_input);
+		ft_putterm("sc");
 	}
 	if (g_pid == 1)
 		ft_putchar('\n');

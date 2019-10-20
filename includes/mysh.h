@@ -53,6 +53,8 @@
 # define DOWN 4348699
 # define ESC 27
 # define BACKSPACE 127
+# define HOME 4741915
+# define END 4610843
 
 /*
 **		Colors
@@ -199,6 +201,7 @@ int				ft_readshow(char *cmd);
 void			ft_termmanager(char *g_input, t_cursor g_cursor);
 t_cursor		ft_curright(t_cursor cur, int i);
 t_cursor		ft_curleft(t_cursor cur, int i);
+t_cursor	ft_defaultcursor(t_cursor *cursor);
 
 /*
 **		signals
