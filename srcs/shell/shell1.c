@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 13:48:31 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/27 21:38:33 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/10/20 20:54:13 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_cursor	ft_curright(t_cursor cur, int i)
 	{
 		cur.x++;
 		p = (cur.y == 0) ? cur.x + PROMPTLINE : cur.x;
-		if (p > ts.ws_col - 1)
+		if (p >= ts.ws_col - 1)
 		{
 			cur.x = 0;
 			cur.y++;
