@@ -38,33 +38,6 @@ static int	ft_checkkey(int c)
 	return (c);
 }
 
-char		*readline2(char **history)
-{
-	int	key;
-	t_cursor cursor;
-	int i;
-
-	g_input = ft_prepareinput();
-	cursor = ft_defaultcursor(&cursor);
-	i = ft_tablen(history) - 1;
-	while ((key = ft_checkkey(ft_getch())) > 0)
-	{
-		if (ft_isprint(key))
-			cursor = ft_straddchrinpos(key, cursor);
-		else
-			cursor = ft_checknoprint(key, cursor, history, &i);
-	}
-	if (key == -1)
-	{
-		if (key == -1)
-			ft_putchar('\n');
-		ft_strdel(&g_input);
-		return (NULL);
-	}
-	ft_straddchr(g_input, '\n');
-	return (g_input);
-}
-
 struct winsize	ft_winsize(void)
 {
 	struct winsize ts;
@@ -174,6 +147,33 @@ void ft_termmanager(char *g_input, t_cursor g_cursor)
 	ft_current_cursor(g_cursor);
 }
 
+char		*readline2(char **history)
+{
+	int	key;
+	t_cursor cursor;
+	int i;
+
+	g_input = ft_prepareinput();
+	cursor = ft_defaultcursor(&cursor);
+	i = ft_tablen(history) - 1;
+	while ((key = ft_checkkey(ft_getch())) > 0)
+	{
+		if (ft_isprint(key))
+			cursor = ft_straddchrinpos(key, cursor);
+		else
+			cursor = ft_checknoprint(key, cursor, history, &i);
+	}
+	if (key == -1)
+	{
+		if (key == -1)
+			ft_putchar('\n');
+		ft_strdel(&g_input);
+		return (NULL);
+	}
+	ft_straddchr(g_input, '\n');
+	return (g_input);
+}
+
 char		*readline(char **history)
 {
 	int	key;
@@ -199,6 +199,7 @@ char		*readline(char **history)
 		ft_strdel(&g_input);
 		return (NULL);
 	}
+	ft_cancel();
 	ft_putchar('\n');
 	return (g_input);
 }
