@@ -204,6 +204,7 @@ t_cursor		ft_curleft(t_cursor cur, int i);
 t_cursor	ft_defaultcursor(t_cursor *cursor);
 struct winsize	ft_winsize(void);
 void	ft_current_cursor(t_cursor g_cursor);
+void		ft_cancel(void);
 
 /*
 **		signals

@@ -191,14 +191,14 @@ char		*readline(char **history)
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 		ft_termmanager(g_input, g_cursor);
 	}
-	ft_putchar('\n');
 	if (key == -1 || !ft_strisprint(g_input))
 	{
 		if (key == -1)
-			ft_putchar('\n');
+			ft_cancel();
 		ft_strdel(&g_input);
 		return (NULL);
 	}
+	ft_putchar('\n');
 	return (g_input);
 }
 

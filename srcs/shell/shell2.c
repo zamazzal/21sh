@@ -34,7 +34,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == BACKSPACE)
 	{
-		if (cursor.pos >= 0)
+		if (cursor.pos > 0)
 		{
 			ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
 			cursor.pos = (cursor.pos - 1 >= 0) ? (cursor.pos - 1) : 0;
