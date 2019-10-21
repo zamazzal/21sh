@@ -82,6 +82,51 @@ t_cursor		ft_altl(t_cursor cursor)
 	return (cursor);
 }
 
+t_cursor		ft_altu(t_cursor cursor)
+{
+	struct winsize ts;
+	int p;
+
+	ts = ft_winsize();
+	if (cursor.y > 0)
+	{
+		cursor.y--;
+		cursor.x = (cursor.y == 0) ? cursor.x - PROMPTLINE : cursor.x;
+		if (cursor.x < 0)
+			cursor.x = 0;
+		p = (cursor.y == 0) ? PROMPTLINE : 0;
+		cursor.pos -= ts.ws_col - 1;
+		if (cursor.pos < 0)
+			cursor.pos = 0;
+	}
+	return (cursor);
+}
+
+t_cursor		ft_altd(t_cursor cursor)
+{
+	struct winsize ts;
+	int x;
+	int len;
+	int p;
+
+	ts = ft_winsize();
+	len = ft_strlen(g_input);
+	x = (len + PROMPTLINE + ((len + PROMPTLINE) / (ts.ws_col))) / (ts.ws_col);
+	if (cursor.y < x)
+	{
+		cursor.x = (cursor.y == 0) ? cursor.x + PROMPTLINE : cursor.x;
+		cursor.y++;
+		cursor.pos += ts.ws_col - 1;
+		if (cursor.pos > len)
+		{
+			cursor.pos = len;
+			p = (len + PROMPTLINE) - ((x) * (ts.ws_col - 1));
+			cursor.x = p;
+		}
+	}
+	return (cursor);
+}
+
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	if (key == RIGHT)
@@ -157,6 +202,14 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	if (key == ALTL)
 	{
 		cursor = ft_altl(cursor);
+	}
+	if (key == ALTU)
+	{
+		cursor = ft_altu(cursor);
+	}
+	if (key == ALTD)
+	{
+		cursor = ft_altd(cursor);
 	}
 	return (cursor);
 }

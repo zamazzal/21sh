@@ -57,6 +57,8 @@
 # define END 4610843
 # define ALTR 1130044187
 # define ALTL 1146821403
+# define ALTU 1096489755
+# define ALTD 1113266971
 
 /*
 **		Colors
