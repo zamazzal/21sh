@@ -73,39 +73,20 @@ struct winsize	ft_winsize(void)
 	return (ts);
 }
 
-void		ft_clearlines(int l)
-{
-	int i;
-
-	i = l;
-	while (i >= 0)
-	{
-		ft_cursmove('d', 1);
-		ft_putterm("cr");
-		ft_putterm("ce");
-		i--;
-	}
-	i = l;
-	while (i >= 0)
-	{
-		ft_cursmove('u', 1);
-		ft_putterm("ce");
-		i--;
-	}
-}
-
-void		ft_showstr(char *str, int col)
+void		ft_showstr(char *str)
 {
 	int i;
 	int x;
+	struct winsize ts;
 
 	i = 0;
 	x = 6;
+	ts = ft_winsize();
 	while (str[i] != '\0')
 	{
 		ft_putchar(str[i]);
 		x++;
-		if (x == col)
+		if (x == ts.ws_col - 1)
 		{
 			x = 0;
 			ft_cursmove('d', 1);
@@ -115,19 +96,23 @@ void		ft_showstr(char *str, int col)
 	}
 }
 
+int		ft_getstrlen(char *str)
+{
+	int x;
+	int len;
+	struct winsize ts;
+
+	len = ft_strlen(str);
+	ts = ft_winsize();
+	x = (len + PROMPTLINE + ((len + PROMPTLINE) / (ts.ws_col))) / (ts.ws_col);
+	return (x);
+}
+
 int		ft_readshow(char *cmd)
 {
-	struct winsize ts;
-	int len;
-	int x;
-
-	ts = ft_winsize();
-	len = ft_strlen(cmd);
-	x = (len + PROMPTLINE + ((len + PROMPTLINE) / (ts.ws_col))) / (ts.ws_col); // ch7al mn line ghadi ykon f cmd
-	ft_clearlines(x);
-	ft_prompt();
-	ft_showstr(cmd, ts.ws_col - 1);
-	return (x);
+	ft_putterm("cd");
+	ft_showstr(cmd);
+	return (0);
 }
 
 t_cursor	ft_curright(t_cursor cur, int i)
@@ -174,14 +159,19 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 	return (cur);
 }
 
+void	ft_current_cursor(t_cursor g_cursor)
+{
+	ft_cursmove('d', g_cursor.y);
+	ft_cursmove('r', g_cursor.x);
+}
+
 void ft_termmanager(char *g_input, t_cursor g_cursor)
 {
 	ft_putterm("rc");
 	ft_putterm("sc");
 	ft_readshow(g_input);
 	ft_putterm("rc");
-	ft_cursmove('d', g_cursor.y);
-	ft_cursmove('r', g_cursor.x);
+	ft_current_cursor(g_cursor);
 }
 
 char		*readline(char **history)
