@@ -19,7 +19,6 @@ void		ft_cancel(void)
 	g_cursor.pos = ft_strlen(g_input);
 	g_cursor = ft_curright(g_cursor, g_cursor.pos);
 	ft_current_cursor(g_cursor);
-	ft_putchar('\n');
 }
 
 void		ft_signal(int x)
@@ -27,6 +26,7 @@ void		ft_signal(int x)
 	if (x == SIGINT && g_pid == 0)
 	{
 		ft_cancel();
+		ft_putchar('\n');
 		g_cursor = ft_defaultcursor(&g_cursor);
 		if (g_input_type == 1)
 			ft_prompt();

@@ -12,6 +12,76 @@
 
 #include "mysh.h"
 
+int			ft_firstinstr(char *str, int pos)
+{
+	int i;
+
+	i = pos;
+	while (i - 1 >= 0 && (ft_isprint(str[i - 1]) && !ft_isspace(str[i - 1])))
+		i--;
+	return (i);
+}
+
+int			ft_getnextpos(char *str, int pos)
+{
+	int i;
+
+	i = pos;
+	while(str[i] != '\0' && !ft_isspace(str[i]))
+		i++;
+	while (str[i] != '\0' && ft_isspace(str[i]))
+		i++;
+	if (str[i] != '\0' && !ft_isspace(str[i]))
+		return (i);
+	return (-1);
+}
+
+int			ft_getlastpos(char *str, int pos)
+{
+	int i;
+
+	i = pos;
+	if (str[i] == '\0')
+	{
+		i--;
+		if (i >= 0 && !ft_isspace(str[i]))
+			return (ft_firstinstr(str, i));
+	}
+	while(i >= 0 && !ft_isspace(str[i]))
+		i--;
+	while (i >= 0 && ft_isspace(str[i]))
+		i--;
+	if (i >= 0 && !ft_isspace(str[i]))
+		return (ft_firstinstr(str, i));
+	return (-1);
+}
+
+t_cursor		ft_altr(t_cursor cursor)
+{
+	int x;
+
+	x = ft_getnextpos(g_input, cursor.pos);
+	if (x != -1)
+	{
+		cursor = ft_curright(cursor, x - cursor.pos);
+		cursor.pos = x;
+	}
+	return (cursor);
+}
+
+t_cursor		ft_altl(t_cursor cursor)
+{
+	int x;
+
+	x = ft_getlastpos(g_input, cursor.pos);
+	if (x != -1)
+	{
+		cursor = ft_curleft(cursor, cursor.pos - x);
+		cursor.pos = x;
+	}
+	return (cursor);
+}
+
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	if (key == RIGHT)
@@ -79,6 +149,14 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		cursor = ft_defaultcursor(&cursor);
 		cursor.pos = ft_strlen(g_input);
 		cursor = ft_curright(cursor, cursor.pos);
+	}
+	if (key == ALTR)
+	{
+		cursor = ft_altr(cursor);
+	}
+	if (key == ALTL)
+	{
+		cursor = ft_altl(cursor);
 	}
 	return (cursor);
 }

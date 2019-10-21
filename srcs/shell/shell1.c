@@ -195,6 +195,7 @@ char		*readline(char **history)
 	{
 		if (key == -1)
 			ft_cancel();
+		ft_putchar('\n');
 		ft_strdel(&g_input);
 		return (NULL);
 	}

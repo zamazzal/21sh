@@ -55,6 +55,8 @@
 # define BACKSPACE 127
 # define HOME 4741915
 # define END 4610843
+# define ALTR 1130044187
+# define ALTL 1146821403
 
 /*
 **		Colors
