@@ -28,9 +28,9 @@ void		ft_signal(int x)
 		ft_cancel();
 		ft_putchar('\n');
 		g_cursor = ft_defaultcursor(&g_cursor);
-		if (g_input_type == 1)
+		if (g_input_type == PROMPT)
 			ft_prompt();
-		else if (g_input_type == 10)
+		else if (g_input_type == BS)
 			ft_putstr("> ");
 		else if (g_input_type == DQ)
 			ft_putstr("dquote> ");
@@ -38,7 +38,7 @@ void		ft_signal(int x)
 			ft_putstr("quote> ");
 		else if (g_input_type == BQ)
 			ft_putstr("bquote> ");
-		else if (g_input_type == 20)
+		else if (g_input_type == PIPE)
 			ft_putnstr("pipe> ", g_pipe);
 		ft_strclr(g_input);
 		ft_putterm("sc");

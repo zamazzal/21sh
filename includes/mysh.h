@@ -105,12 +105,20 @@ char			*g_input;
 int				g_pipe;
 t_cursor		g_cursor;
 
+# define PROMPT 1
 # define SQ 39
 # define DQ 34
 # define BQ 96
 # define BS 92
+# define PIPE 124
 # define BUFFER_SIZE 1024
+
 # define PROMPTLINE 6
+# define BSPROMPT 2
+# define DQPROMPT 8
+# define QPROMPT 7
+# define BQPROMPT 8
+# define PIPEPROMPT 6
 
 /*
 **		shell
@@ -209,6 +217,7 @@ t_cursor	ft_defaultcursor(t_cursor *cursor);
 struct winsize	ft_winsize(void);
 void	ft_current_cursor(t_cursor g_cursor);
 void		ft_cancel(void);
+int			ft_promptlen(void);
 
 /*
 **		signals

@@ -41,7 +41,7 @@ char			*ft_endbackslash(char *cmd, char **history)
 	while ((r = ft_checkbackslash(cmd)))
 	{
 		ft_putstr("> ");
-		g_input_type = 10;
+		g_input_type = BS;
 		if (!(input = readline(history)))
 			continue ;
 		len = ft_strlen(cmd);

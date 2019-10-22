@@ -50,7 +50,7 @@ char	*ft_closepipe(char *cmd, char **history)
 	while ((r = ft_checkpipe(cmd)))
 	{
 		ft_putnstr("pipe> ", g_pipe);
-		g_input_type = 20;
+		g_input_type = PIPE;
 		if (!(input = readline(history)))
 			continue ;
 		g_pipe++;

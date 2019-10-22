@@ -86,15 +86,17 @@ t_cursor		ft_altu(t_cursor cursor)
 {
 	struct winsize ts;
 	int p;
+	int prompt;
 
 	ts = ft_winsize();
+	prompt = ft_promptlen();
 	if (cursor.y > 0)
 	{
 		cursor.y--;
-		cursor.x = (cursor.y == 0) ? cursor.x - PROMPTLINE : cursor.x;
+		cursor.x = (cursor.y == 0) ? cursor.x - prompt : cursor.x;
 		if (cursor.x < 0)
 			cursor.x = 0;
-		p = (cursor.y == 0) ? PROMPTLINE : 0;
+		p = (cursor.y == 0) ? prompt : 0;
 		cursor.pos -= ts.ws_col - 1;
 		if (cursor.pos < 0)
 			cursor.pos = 0;
@@ -108,19 +110,21 @@ t_cursor		ft_altd(t_cursor cursor)
 	int x;
 	int len;
 	int p;
+	int prompt;
 
 	ts = ft_winsize();
 	len = ft_strlen(g_input);
-	x = (len + PROMPTLINE + ((len + PROMPTLINE) / (ts.ws_col))) / (ts.ws_col);
+	prompt = ft_promptlen();
+	x = (len + prompt + ((len + prompt) / (ts.ws_col))) / (ts.ws_col);
 	if (cursor.y < x)
 	{
-		cursor.x = (cursor.y == 0) ? cursor.x + PROMPTLINE : cursor.x;
+		cursor.x = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
 		cursor.y++;
 		cursor.pos += ts.ws_col - 1;
 		if (cursor.pos > len)
 		{
 			cursor.pos = len;
-			p = (len + PROMPTLINE) - ((x) * (ts.ws_col - 1));
+			p = (len + prompt) - ((x) * (ts.ws_col - 1));
 			cursor.x = p;
 		}
 	}
