@@ -120,8 +120,9 @@ t_cursor	ft_curright(t_cursor cur, int i)
 	while (j < i)
 	{
 		cur.x++;
+		cur.pos++;
 		p = (cur.y == 0) ? cur.x + prompt : cur.x;
-		if (p >= ts.ws_col - 1)
+		if (p >= ts.ws_col - 1 || g_input[cur.pos] == '\n')
 		{
 			cur.x = 0;
 			cur.y++;
@@ -142,6 +143,7 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 	prompt = ft_promptlen();
 	while (j < i)
 	{
+		cur.pos--;
 		if (cur.x == 0 && cur.y == 0)
 			break ;
 		cur.x--;
@@ -197,7 +199,6 @@ char		*readline2(char **history)
 	}
 	ft_straddchr(g_input, '\n');
 	ft_cancel();
-	ft_putchar('\n');
 	return (g_input);
 }
 

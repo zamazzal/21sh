@@ -64,7 +64,6 @@ t_cursor		ft_altr(t_cursor cursor)
 	if (x != -1)
 	{
 		cursor = ft_curright(cursor, x - cursor.pos);
-		cursor.pos = x;
 	}
 	return (cursor);
 }
@@ -77,7 +76,6 @@ t_cursor		ft_altl(t_cursor cursor)
 	if (x != -1)
 	{
 		cursor = ft_curleft(cursor, cursor.pos - x);
-		cursor.pos = x;
 	}
 	return (cursor);
 }
@@ -138,7 +136,6 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		if (cursor.pos < (int)ft_strlen(g_input))
 		{
 			cursor = ft_curright(cursor, 1);
-			cursor.pos++;
 		}
 		return (cursor);
 	}
@@ -147,7 +144,6 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		if (cursor.pos - 1 >= 0)
 		{
 			cursor = ft_curleft(cursor, 1);
-			cursor.pos--;
 		}
 		return (cursor);
 	}
@@ -156,7 +152,6 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		if (cursor.pos > 0)
 		{
 			ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
-			cursor.pos = (cursor.pos - 1 >= 0) ? (cursor.pos - 1) : 0;
 			cursor = ft_curleft(cursor, 1);
 		}
 		return (cursor);
@@ -167,8 +162,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		{
 			ft_strcpy(g_input, history[*i]);
 			cursor = ft_defaultcursor(&cursor);
-			cursor.pos = ft_strlen(g_input);
-			cursor = ft_curright(cursor, cursor.pos);
+			cursor = ft_curright(cursor, ft_strlen(g_input));
 			if (*i > 0)
 				(*i) = (*i) - 1;
 		}
@@ -180,8 +174,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 			(*i) = (*i) + 1;
 			ft_strcpy(g_input, history[*i]);
 			cursor = ft_defaultcursor(&cursor);
-			cursor.pos = ft_strlen(g_input);
-			cursor = ft_curright(cursor, cursor.pos);
+			cursor = ft_curright(cursor, ft_strlen(g_input));
 		}
 		else
 		{
@@ -196,8 +189,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	if (key == END)
 	{
 		cursor = ft_defaultcursor(&cursor);
-		cursor.pos = ft_strlen(g_input);
-		cursor = ft_curright(cursor, cursor.pos);
+		cursor = ft_curright(cursor, ft_strlen(g_input));
 	}
 	if (key == ALTR)
 	{

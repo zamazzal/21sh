@@ -16,8 +16,7 @@ void		ft_cancel(void)
 {
 	ft_putterm("rc");
 	g_cursor = ft_defaultcursor(&g_cursor);
-	g_cursor.pos = ft_strlen(g_input);
-	g_cursor = ft_curright(g_cursor, g_cursor.pos);
+	g_cursor = ft_curright(g_cursor, ft_strlen(g_input));
 	ft_current_cursor(g_cursor);
 }
 

@@ -35,7 +35,6 @@ t_cursor	ft_straddchrinpos(char c, t_cursor cursor)
 	ft_strcat(g_input, &tmp[cursor.pos]);
 	free(tmp);
 	free(tmp2);
-	cursor.pos += 1;
 	cursor = ft_curright(cursor, 1);
 	return (cursor);
 }
