@@ -107,6 +107,37 @@ int			ft_promptlen(void)
 	return (0);
 }
 
+int	ft_getlinelen(int y)
+{
+	int i;
+	struct winsize ts;
+	t_cursor cursor;
+	int prompt;
+	int p;
+	int len;
+
+	i = 0;
+	ts = ft_winsize();
+	prompt = ft_promptlen();
+	len = ft_strlen(g_input);
+	cursor = ft_defaultcursor(&cursor);
+	while (i < len)
+	{
+		cursor.x++;
+		cursor.pos++;
+		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
+		if (p >= ts.ws_col - 1 || g_input[cursor.pos] == '\n')
+		{
+			if (cursor.y == y)
+				return (cursor.x - 1);
+			cursor.x = 0;
+			cursor.y++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 t_cursor	ft_curright(t_cursor cur, int i)
 {
 	int j;
@@ -119,8 +150,8 @@ t_cursor	ft_curright(t_cursor cur, int i)
 	prompt = ft_promptlen();
 	while (j < i)
 	{
-		cur.x++;
 		cur.pos++;
+		cur.x++;
 		p = (cur.y == 0) ? cur.x + prompt : cur.x;
 		if (p >= ts.ws_col - 1 || g_input[cur.pos] == '\n')
 		{
@@ -144,13 +175,15 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 	while (j < i)
 	{
 		cur.pos--;
-		if (cur.x == 0 && cur.y == 0)
+		if (cur.x < 0 && cur.y == 0)
 			break ;
 		cur.x--;
-		if (cur.x == 0 && cur.y > 0)
+		if (cur.x < 0 && cur.y > 0)
 		{
 			cur.y--;
-			cur.x = (cur.y == 0) ? (ts.ws_col - 1) - prompt : (ts.ws_col - 1);
+			printf("\n\n\n\n%d\n", ft_getlinelen(cur.y));
+			sleep(1);
+			cur.x = ft_getlinelen(cur.y);
 		}
 		j++;
 	}

@@ -41,6 +41,8 @@ char	*ft_closequotes(char *cmd, char **history)
 
 	while ((r = ft_checkquote(cmd)))
 	{
+		g_cursor = ft_defaultcursor(&g_cursor);
+		ft_putterm("cr");
 		if (r == DQ)
 			ft_putstr("dquote> ");
 		else if (r == SQ)
