@@ -131,6 +131,9 @@ t_cursor		ft_altd(t_cursor cursor)
 
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
+	int c;
+	int f;
+
 	if (key == RIGHT)
 	{
 		if (cursor.pos < (int)ft_strlen(g_input))
@@ -151,8 +154,18 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	{
 		if (cursor.pos > 0)
 		{
-			ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
-			cursor = ft_curleft(cursor, 1);
+			c = g_input[cursor.pos - 1];
+			if (c == '\n')
+			{
+				f = cursor.pos;
+				cursor = ft_curleft(cursor, 1);
+				ft_strcpy(&g_input[f - 1], &g_input[f]);
+			}
+			else
+			{
+				ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
+				cursor = ft_curleft(cursor, 1);
+			}
 		}
 		return (cursor);
 	}

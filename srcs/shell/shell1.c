@@ -46,15 +46,18 @@ struct winsize	ft_winsize(void)
 	return (ts);
 }
 
-void		ft_showstr(char *str)
+int		ft_showstr(char *str)
 {
 	int i;
 	int x;
 	struct winsize ts;
+	int y;
+	int p;
 
 	i = 0;
 	x = ft_promptlen();
 	ts = ft_winsize();
+	p = 0;
 	while (str[i] != '\0')
 	{
 		ft_putchar(str[i]);
@@ -63,10 +66,26 @@ void		ft_showstr(char *str)
 		{
 			x = 0;
 			ft_cursmove('d', 1);
+			//y = ft_getcurpos();
+			y = 26;
+			if (y == ts.ws_row)
+				p++;
 			ft_putterm("cr");
+			ft_putterm("ce");
+		}
+		else if (str[i] == '\n')
+		{
+			//y = ft_getcurpos();
+			y = 26;
+			if (y == ts.ws_row)
+				p++;
+			ft_putterm("cr");
+			ft_putterm("ce");
+			x = 0;
 		}
 		i++;
 	}
+	return (p);
 }
 
 int		ft_getstrlen(char *str)
@@ -86,8 +105,7 @@ int		ft_getstrlen(char *str)
 int		ft_readshow(char *cmd)
 {
 	ft_putterm("cd");
-	ft_showstr(cmd);
-	return (0);
+	return (ft_showstr(cmd));
 }
 
 int			ft_promptlen(void)
@@ -123,19 +141,29 @@ int	ft_getlinelen(int y)
 	cursor = ft_defaultcursor(&cursor);
 	while (i < len)
 	{
-		cursor.x++;
-		cursor.pos++;
 		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
-		if (p >= ts.ws_col - 1 || g_input[cursor.pos] == '\n')
+		if (p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
 		{
+			
 			if (cursor.y == y)
-				return (cursor.x - 1);
+			{
+				if (p >= ts.ws_col - 1)
+					return (cursor.x - 1);
+				else
+					return (cursor.x);
+			}
 			cursor.x = 0;
 			cursor.y++;
 		}
+		else
+		{
+			cursor.x++;
+		}
+		cursor.pos++;
 		i++;
 	}
-	return (0);
+	cursor.x += cursor.y;
+	return ((cursor.x >= 0) ? cursor.x : 0);
 }
 
 t_cursor	ft_curright(t_cursor cur, int i)
@@ -153,7 +181,7 @@ t_cursor	ft_curright(t_cursor cur, int i)
 		cur.pos++;
 		cur.x++;
 		p = (cur.y == 0) ? cur.x + prompt : cur.x;
-		if (p >= ts.ws_col - 1 || g_input[cur.pos] == '\n')
+		if (p >= ts.ws_col - 1 || g_input[cur.pos - 1] == '\n')
 		{
 			cur.x = 0;
 			cur.y++;
@@ -174,15 +202,13 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 	prompt = ft_promptlen();
 	while (j < i)
 	{
-		cur.pos--;
 		if (cur.x < 0 && cur.y == 0)
 			break ;
+		cur.pos--;
 		cur.x--;
 		if (cur.x < 0 && cur.y > 0)
 		{
 			cur.y--;
-			printf("\n\n\n\n%d\n", ft_getlinelen(cur.y));
-			sleep(1);
 			cur.x = ft_getlinelen(cur.y);
 		}
 		j++;
@@ -198,10 +224,13 @@ void	ft_current_cursor(t_cursor g_cursor)
 
 void ft_termmanager(char *g_input, t_cursor g_cursor)
 {
+	int y;
+
 	ft_putterm("rc");
 	ft_putterm("sc");
-	ft_readshow(g_input);
+	y = ft_readshow(g_input);
 	ft_putterm("rc");
+	ft_cursmove('u', y);
 	ft_current_cursor(g_cursor);
 }
 
@@ -217,7 +246,7 @@ char		*readline2(char **history)
 	while ((key = ft_checkkey(ft_getch())) > 0)
 	{
 		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor);
+			g_cursor = ft_straddchrinpos(key, g_cursor); // done
 		else
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 		ft_termmanager(g_input, g_cursor);
@@ -294,6 +323,7 @@ void		ft_shell(void)
 	history = (char **)malloc(sizeof(char*));
 	while (1)
 	{
+		ft_term_prepare(1);
 		ft_prompt();
 		g_input_type = PROMPT;
 		ft_term_prepare(0);
@@ -308,6 +338,7 @@ void		ft_shell(void)
 			break ;
 		ft_endinput(cmds, input);
 	}
+	ft_term_prepare(1);
 	ft_endinput(cmds, input);
 	ft_freetable(&history);
 }

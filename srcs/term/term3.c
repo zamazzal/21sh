@@ -16,3 +16,24 @@ int ft_putterm(char *t)
 {
     return (tputs(tgetstr(t, NULL), 1, ft_putchr));
 }
+
+int 	ft_getcurpos(void)
+{
+	int i;
+	char str[32];
+
+	i = 0;
+	ft_term_prepare(0);
+	ft_putstr("\033[6n");
+	read(1, &str[i], 2);
+	while (i < 32)
+	{
+		read(1, &str[i], 1);
+		if (str[i] == ';')
+			break ;
+		i++;
+	}
+	str[i] = '\0';
+	ft_term_prepare(1);
+	return (ft_atoi(str));
+}
