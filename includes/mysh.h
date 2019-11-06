@@ -94,6 +94,7 @@ typedef struct	s_cursor
 	int			x;
 	int			y;
 	int			pos;
+	int			y_0;
 }				t_cursor;
 
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"

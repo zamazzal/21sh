@@ -202,8 +202,6 @@ int				main(void)
 		return (0);
 	signal(SIGINT, ft_signal);
 	signal(SIGWINCH, ft_winch);
-	ft_term_nocanon();
-	ft_getcurpos();
 	SAFE(g_environ = creation(environ));
 	g_input_type = 0;
 	ft_shell();
