@@ -116,7 +116,7 @@ t_cursor		g_cursor;
 
 # define PROMPTLINE 6
 # define BSPROMPT 2
-# define DQPROMPT 7
+# define DQPROMPT 8
 # define QPROMPT 7
 # define BQPROMPT 8
 # define PIPEPROMPT 6

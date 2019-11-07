@@ -56,5 +56,6 @@ char	*ft_closequotes(char *cmd, char **history)
 		ft_strdel(&input);
 	}
 	cmd = ft_removeantin(cmd);
+
 	return (cmd);
 }

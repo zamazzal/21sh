@@ -48,9 +48,10 @@ int					ft_checkcmdform(char *cmd)
 
 char				*makecmdclear(char *cmd, char **history)
 {
+	int x;
 	int r;
 
-	cmd = ft_removeantin(cmd);
+	x = 0;
 	while ((r = ft_checkcmdform(cmd)))
 	{
 		if (r == 1)
@@ -59,6 +60,9 @@ char				*makecmdclear(char *cmd, char **history)
 			cmd = ft_closepipe(cmd, history);
 		if (r == 3)
 			cmd = ft_endbackslash(cmd, history);
+		x = 1;
 	}
+	if (x == 1)
+		ft_putchar('\n');
 	return (cmd);
 }

@@ -26,7 +26,6 @@ t_cursor	ft_defaultcursor(t_cursor *cursor)
 	(*cursor).pos = 0;
 	(*cursor).x = 0;
 	(*cursor).y = 0;
-	(*cursor).y_0 = ft_getcurpos();
 	return (*cursor);
 }
 
@@ -61,23 +60,23 @@ int		ft_showstr(char *str)
 	p = 0;
 	while (str[i] != '\0')
 	{
-		ft_putchar(str[i]);
+		if (str[i] != '\n')
+			ft_putchar(str[i]);
 		x++;
-		if (x == ts.ws_col - 1)
-		{
-			x = 0;
-			y = ft_getcurpos();
-			if (y >= ts.ws_row)
-				p++;
-			ft_cursmove('d', 1);
-			ft_putterm("cr");
-		}
-		else if (str[i] == '\n')
+		if (x == ts.ws_col || str[i] == '\n')
 		{
 			y = ft_getcurpos();
 			if (y >= ts.ws_row)
 				p++;
-			ft_putterm("cr");
+			if (x == ts.ws_col)
+			{
+				ft_cursmove('d', 1);
+				ft_putterm("cr");
+			}
+			else if (str[i] == '\n')
+			{
+				ft_putchar(str[i]);
+			}
 			x = 0;
 		}
 		i++;
@@ -141,10 +140,9 @@ int	ft_getlinelen(int y)
 		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
 		if (p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
 		{
-			
 			if (cursor.y == y)
 			{
-				if (p >= ts.ws_col - 1)
+				if (p >= ts.ws_col)
 					return (cursor.x - 1);
 				else
 					return (cursor.x);
@@ -178,11 +176,10 @@ t_cursor	ft_curright(t_cursor cur, int i)
 		cur.pos++;
 		cur.x++;
 		p = (cur.y == 0) ? cur.x + prompt : cur.x;
-		if (p >= ts.ws_col - 1 || g_input[cur.pos - 1] == '\n')
+		if (p >= ts.ws_col || g_input[cur.pos - 1] == '\n')
 		{
 			cur.x = 0;
 			cur.y++;
-			cur.y_0++;
 		}
 		j++;
 	}
@@ -207,8 +204,8 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 		if (cur.x < 0 && cur.y > 0)
 		{
 			cur.y--;
-			cur.y_0--;
 			cur.x = ft_getlinelen(cur.y);
+			cur.x = (cur.y == 0) ? cur.x - 1 : cur.x; // last \n not last line
 		}
 		j++;
 	}
@@ -224,7 +221,6 @@ void	ft_current_cursor(t_cursor g_cursor)
 void ft_termmanager(char *g_input, t_cursor g_cursor)
 {
 	int y;
-	struct winsize ts;
 
 	y = 0;
 	ft_putterm("rc");
@@ -234,9 +230,6 @@ void ft_termmanager(char *g_input, t_cursor g_cursor)
 	ft_cursmove('u', y);
 	ft_putterm("sc");
 	ft_current_cursor(g_cursor);
-	ts = ft_winsize();
-	if (g_cursor.y >= ts.ws_row)
-		exit(1);
 }
 
 char		*readline2(char **history)
@@ -251,7 +244,7 @@ char		*readline2(char **history)
 	while ((key = ft_checkkey(ft_getch())) > 0)
 	{
 		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor); // done
+			g_cursor = ft_straddchrinpos(key, g_cursor);
 		else
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 		ft_termmanager(g_input, g_cursor);
@@ -325,25 +318,24 @@ void		ft_shell(void)
 	char			**cmds;
 	char			**history;
 
-	history = (char **)malloc(sizeof(char*));
+	if (!(history = (char **)malloc(sizeof(char*))))
+		return ;
 	while (1)
 	{
-		ft_term_prepare(1);
 		ft_prompt();
 		g_input_type = PROMPT;
 		ft_term_prepare(0);
 		if (!(input = readline(history)) || parseerror(input, 1))
 			continue ;
 		input = makecmdclear(input, history);
+		ft_term_prepare(1);
 		history = ft_addtotab(history, input);
 		if (!((cmds = createcmds(input))))
 			continue ;
-		ft_term_prepare(1);
 		if (ft_putcmds(cmds))
 			break ;
 		ft_endinput(cmds, input);
 	}
-	ft_term_prepare(1);
 	ft_endinput(cmds, input);
 	ft_freetable(&history);
 }

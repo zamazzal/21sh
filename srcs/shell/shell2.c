@@ -179,6 +179,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 			if (*i > 0)
 				(*i) = (*i) - 1;
 		}
+		return (cursor);
 	}
 	if (key == DOWN)
 	{
@@ -194,6 +195,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 			ft_strclr(g_input);
 			cursor = ft_defaultcursor(&cursor);
 		}
+		return (cursor);
 	}
 	if (key == HOME)
 	{
