@@ -154,8 +154,7 @@ t_cursor		ft_altd(t_cursor cursor)
 		cursor.x = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
 		cursor.y++;
 		p = ft_getlinelen(cursor.y);
-		if (cursor.x > p)
-			cursor.x = p;
+		cursor.x = (cursor.x > p) ? p : cursor.x;
 		cursor.pos += cursor.x + 1;
 		if (cursor.pos > len)
 		{
