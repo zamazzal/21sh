@@ -52,7 +52,6 @@ char			*ft_endbackslash(char *cmd, char **history)
 			ft_strdel(&cmd);
 			cmd = ft_strdup(input);
 		}
-		cmd = ft_removeantin(cmd);
 		ft_strdel(&input);
 	}
 	return (cmd);

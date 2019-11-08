@@ -83,51 +83,92 @@ t_cursor		ft_altl(t_cursor cursor)
 t_cursor		ft_altu(t_cursor cursor)
 {
 	struct winsize ts;
-	int p;
 	int prompt;
+	int x;
 
 	ts = ft_winsize();
 	prompt = ft_promptlen();
 	if (cursor.y > 0)
 	{
 		cursor.y--;
+		x = ft_getlinelen(cursor.y);
+		cursor.pos -= cursor.x;
 		cursor.x = (cursor.y == 0) ? cursor.x - prompt : cursor.x;
-		if (cursor.x < 0)
-			cursor.x = 0;
-		p = (cursor.y == 0) ? prompt : 0;
-		cursor.pos -= ts.ws_col - 1;
+		cursor.x = (cursor.x > x) ? x : cursor.x;
+		cursor.x = (cursor.x < 0) ? 0 : cursor.x;
+		cursor.pos -= x - cursor.x + 1;
 		if (cursor.pos < 0)
 			cursor.pos = 0;
 	}
 	return (cursor);
 }
 
+
+
+int	ft_getlines()
+{
+	int i;
+	struct winsize ts;
+	t_cursor cursor;
+	int prompt;
+	int p;
+	int f;
+
+	i = 0;
+	ts = ft_winsize();
+	f = 1;
+	prompt = ft_promptlen();
+	cursor = ft_defaultcursor(&cursor);
+	while (g_input[i] != '\0')
+	{
+		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
+		if (p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
+		{
+			f++;
+			cursor.x = 0;
+			cursor.y++;
+		}
+		else
+			cursor.x++;
+		cursor.pos++;
+		i++;
+	}
+	return (f);
+}
+/////////////////// errors
 t_cursor		ft_altd(t_cursor cursor)
 {
 	struct winsize ts;
 	int x;
 	int len;
-	int p;
 	int prompt;
+	int p;
 
 	ts = ft_winsize();
 	len = ft_strlen(g_input);
 	prompt = ft_promptlen();
-	x = (len + prompt + ((len + prompt) / (ts.ws_col))) / (ts.ws_col);
-	if (cursor.y < x)
+	x = ft_getlines();
+	if (cursor.y < x - 1)
 	{
+		cursor.pos += ft_getlinelen(cursor.y) - cursor.x;
 		cursor.x = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
 		cursor.y++;
-		cursor.pos += ts.ws_col - 1;
+		p = ft_getlinelen(cursor.y);
+		if (cursor.x > p)
+			cursor.x = p;
+		cursor.pos += cursor.x + 1;
 		if (cursor.pos > len)
 		{
 			cursor.pos = len;
-			p = (len + prompt) - ((x) * (ts.ws_col - 1));
-			cursor.x = p;
+			cursor.x = ft_getlinelen(cursor.y) - cursor.y;
+			if (ft_strchr(g_input, '\n'))
+				cursor.x++;
 		}
 	}
 	return (cursor);
 }
+
+/////////////////////////////
 
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {

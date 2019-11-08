@@ -266,4 +266,5 @@ char			**ft_addtotab(char **tabl, char *str);
 
 
 int				ft_getcurpos(void);
+int	ft_getlinelen(int y);
 #endif

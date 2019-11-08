@@ -84,20 +84,6 @@ int		ft_showstr(char *str)
 	return (p);
 }
 
-int		ft_getstrlen(char *str)
-{
-	int x;
-	int len;
-	int prompt;
-	struct winsize ts;
-
-	len = ft_strlen(str);
-	ts = ft_winsize();
-	prompt = ft_promptlen();
-	x = (len + prompt + ((len + prompt) / (ts.ws_col))) / (ts.ws_col);
-	return (x);
-}
-
 int		ft_readshow(char *cmd)
 {
 	ft_putterm("cd");
@@ -121,6 +107,21 @@ int			ft_promptlen(void)
 	return (0);
 }
 
+int	ft_lastbackline(int p)
+{
+	if (!ft_strnstr(g_input, "\n", p) &&  g_input[p] == '\n')
+		return (1);
+	return (0);
+}
+
+int ft_lastlinereturn(int x, int col, int p, int pos)
+{
+	if (p >= col)
+		return (x - 1);
+	else
+		return ((ft_lastbackline(pos - 1) ? x - 1 : x));
+}
+
 int	ft_getlinelen(int y)
 {
 	int i;
@@ -128,32 +129,23 @@ int	ft_getlinelen(int y)
 	t_cursor cursor;
 	int prompt;
 	int p;
-	int len;
 
 	i = 0;
 	ts = ft_winsize();
 	prompt = ft_promptlen();
-	len = ft_strlen(g_input);
 	cursor = ft_defaultcursor(&cursor);
-	while (i < len)
+	while (g_input[i] != '\0')
 	{
 		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
 		if (p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
 		{
 			if (cursor.y == y)
-			{
-				if (p >= ts.ws_col)
-					return (cursor.x - 1);
-				else
-					return (cursor.x);
-			}
+				return (ft_lastlinereturn(cursor.x, ts.ws_col, p, cursor.pos));
 			cursor.x = 0;
 			cursor.y++;
 		}
 		else
-		{
 			cursor.x++;
-		}
 		cursor.pos++;
 		i++;
 	}
@@ -205,7 +197,6 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 		{
 			cur.y--;
 			cur.x = ft_getlinelen(cur.y);
-			//cur.x = (cur.y == 0) ? cur.x - 1 : cur.x; // last \n not last line
 		}
 		j++;
 	}
