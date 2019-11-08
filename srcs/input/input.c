@@ -54,15 +54,15 @@ char				*makecmdclear(char *cmd, char **history)
 	x = 0;
 	while ((r = ft_checkcmdform(cmd)))
 	{
+		if (x == 0 && r != 3)
+			ft_straddchr(cmd, '\n');
 		if (r == 1)
 			cmd = ft_closequotes(cmd, history);
 		if (r == 2)
 			cmd = ft_closepipe(cmd, history);
 		if (r == 3)
 			cmd = ft_endbackslash(cmd, history);
-		x = 1;
+		x++;
 	}
-	if (x == 1)
-		ft_putchar('\n');
 	return (cmd);
 }

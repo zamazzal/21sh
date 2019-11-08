@@ -148,11 +148,13 @@ static int		ft_putcmd(char *cmd)
 	info.mode = (ft_tablen(cmds) > 1) ? 1 : 0;
 	while (cmds[i] != NULL)
 	{
+		///////////////// * Redirections * /////////////////
 		if (ft_checkred(cmds[i]))
 		{
 			ft_putendl(cmds[i++]);
 			continue;
 		}
+		///////////////// * PIPE * /////////////////
 		if (i > 0)
 			ft_inputdone(p[0]);
 		if (cmds[i + 1] != NULL)
@@ -163,6 +165,7 @@ static int		ft_putcmd(char *cmd)
 		}
 		else
 			dup2(f[1], 1);
+		///////////////// * PARSE & PUTCMD * /////////////////
 		if (putcmd(cmds, i, info))
 			return (1);
 		i++;

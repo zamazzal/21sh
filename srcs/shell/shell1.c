@@ -205,7 +205,7 @@ t_cursor	ft_curleft(t_cursor cur, int i)
 		{
 			cur.y--;
 			cur.x = ft_getlinelen(cur.y);
-			cur.x = (cur.y == 0) ? cur.x - 1 : cur.x; // last \n not last line
+			//cur.x = (cur.y == 0) ? cur.x - 1 : cur.x; // last \n not last line
 		}
 		j++;
 	}
