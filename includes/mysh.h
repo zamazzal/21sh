@@ -59,6 +59,7 @@
 # define ALTL 1146821403
 # define ALTU 1096489755
 # define ALTD 1113266971
+# define CTRLD 4
 
 /*
 **		Colors
@@ -94,7 +95,6 @@ typedef struct	s_cursor
 	int			x;
 	int			y;
 	int			pos;
-	int			y_0;
 }				t_cursor;
 
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
@@ -264,7 +264,8 @@ int				ft_skipspaces(char *str);
 char			**ft_addtotab(char **tabl, char *str);
 
 
-
+int			doctrld(int key, int mode);
 int				ft_getcurpos(void);
+int 	ft_getcurpos2(void);
 int	ft_getlinelen(int y);
 #endif

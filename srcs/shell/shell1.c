@@ -33,8 +33,6 @@ static int	ft_checkkey(int c)
 {
 	if (c == 10)
 		return (0);
-	if (c == 4)
-		return (-1);
 	return (c);
 }
 
@@ -237,7 +235,10 @@ char		*readline2(char **history)
 		if (ft_isprint(key))
 			g_cursor = ft_straddchrinpos(key, g_cursor);
 		else
+		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
+			doctrld(key, 0);
+		}
 		ft_termmanager(g_input, g_cursor);
 	}
 	if (key == -1)
@@ -267,13 +268,15 @@ char		*readline(char **history)
 		if (ft_isprint(key))
 			g_cursor = ft_straddchrinpos(key, g_cursor);
 		else
+		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
+			if (doctrld(key, 1))
+				break;
+		}
 		ft_termmanager(g_input, g_cursor);
 	}
-	if (key == -1 || !ft_strisprint(g_input))
+	if (!ft_strisprint(g_input))
 	{
-		if (key == -1)
-			ft_cancel();
 		ft_putchar('\n');
 		ft_strdel(&g_input);
 		return (NULL);

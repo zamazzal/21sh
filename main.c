@@ -114,13 +114,35 @@ int		ft_pipe(int *fd)
 	return (p[1]);
 }
 
+void			ft_backline()
+{
+	int x;
+
+	x = ft_getcurpos2();
+	if (x > 1)
+	{
+		ft_putterm("mr");
+		ft_putchar('%');
+		ft_putterm("me");
+		ft_putchar(' ');
+		ft_putchar('\n');
+	}
+}
+
 void			ft_waitpids(void)
 {
 	int r;
+	int x;
 
 	r = wait(NULL);
+	x = 0;
 	while (r > 0)
+	{
+		x++;
 		r = wait(NULL);
+	}
+	if (x)
+		ft_backline();
 }
 
 void			ft_endcmds(char **cmds, int fd)

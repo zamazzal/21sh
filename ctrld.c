@@ -12,20 +12,38 @@
 
 #include "mysh.h"
 
-int		ft_ctrld(int pos)
+static int		ft_ctrld2(int pos)
 {
 	if (*g_input == '\0')
-		return (1);
+		return (0);
 	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
 	return (0);
 }
 
-int			doctrld(int key)
+static int		ft_ctrld(int pos)
+{
+	if (*g_input == '\0')
+	{
+		ft_strcpy(g_input, "exit");
+		return (1);
+	}
+	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
+	return (0);
+}
+
+int			doctrld(int key, int mode)
 {
 	if (key == CTRLD)
 	{
-		if (ft_ctrld(g_cursor.pos))
-			return (1);
+		if (mode)
+		{
+			if (ft_ctrld(g_cursor.pos))
+				return (1);
+		}
+		else
+		{
+			ft_ctrld2(g_cursor.pos);
+		}
 	}
 	return (0);
 }

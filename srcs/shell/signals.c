@@ -32,7 +32,7 @@ void		ft_signal(int x)
 		else if (g_input_type == BS)
 			ft_putstr("> ");
 		else if (g_input_type == DQ)
-			ft_putstr("dquote> ");
+			ioctl(0, TIOCSTI, "\12");
 		else if (g_input_type == SQ)
 			ft_putstr("quote> ");
 		else if (g_input_type == BQ)
