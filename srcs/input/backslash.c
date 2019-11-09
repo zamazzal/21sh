@@ -37,13 +37,22 @@ char			*ft_endbackslash(char *cmd, char **history)
 	int		r;
 	char	*input;
 	int		len;
+	int x;
 
+	x = 0;
 	while ((r = ft_checkbackslash(cmd)))
 	{
 		ft_putstr("> ");
 		g_input_type = BS;
-		if (!(input = readline(history)))
+		if (!(input = readline4(history, &x)))
+		{
+			if (x == 1)
+			{
+				ft_strdel(&cmd);
+				return (NULL);
+			}
 			continue ;
+		}
 		len = ft_strlen(cmd);
 		if (len > 1)
 			cmd = ft_strjoin_lite(ft_strsub_lite(cmd, 0, len - 1), input);

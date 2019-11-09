@@ -263,7 +263,8 @@ void			ft_putintab(char ***a_chain, char *entry);
 int				ft_skipspaces(char *str);
 char			**ft_addtotab(char **tabl, char *str);
 
-
+char		*readline4(char **history, int *x);
+char		*readline3(char **history, int *x);
 int			doctrld(int key, int mode);
 int				ft_getcurpos(void);
 int 	ft_getcurpos2(void);

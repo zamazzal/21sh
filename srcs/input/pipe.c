@@ -45,14 +45,23 @@ char	*ft_closepipe(char *cmd, char **history)
 {
 	int		r;
 	char	*input;
+	int x;
 
 	g_pipe = 1;
+	x = 0;
 	while ((r = ft_checkpipe(cmd)))
 	{
 		ft_putnstr("pipe> ", g_pipe);
 		g_input_type = PIPE;
-		if (!(input = readline(history)))
+		if (!(input = readline3(history, &x)))
+		{
+			if (x == 1)
+			{
+				ft_strdel(&cmd);
+				return (NULL);
+			}
 			continue ;
+		}
 		g_pipe++;
 		input = ft_removeantin(input);
 		cmd = ft_strjoin_lite(cmd, input);

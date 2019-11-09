@@ -232,6 +232,8 @@ char		*readline2(char **history)
 	ft_putterm("sc");
 	while ((key = ft_checkkey(ft_getch())) > 0)
 	{
+		if (g_input_type == PROMPT)
+			break ;
 		if (ft_isprint(key))
 			g_cursor = ft_straddchrinpos(key, g_cursor);
 		else
@@ -241,16 +243,83 @@ char		*readline2(char **history)
 		}
 		ft_termmanager(g_input, g_cursor);
 	}
-	if (key == -1)
+	if (g_input_type == PROMPT)
 	{
-		if (key == -1)
-			ft_cancel();
 		ft_putchar('\n');
 		ft_strdel(&g_input);
 		return (NULL);
 	}
 	ft_straddchr(g_input, '\n');
 	ft_cancel();
+	return (g_input);
+}
+
+char		*readline3(char **history, int *x)
+{
+	int	key;
+	int i;
+
+	SAFE(g_input = ft_prepareinput());
+	g_cursor = ft_defaultcursor(&g_cursor);
+	i = ft_tablen(history) - 1;
+	ft_putterm("sc");
+	while ((key = ft_checkkey(ft_getch())) > 0)
+	{
+		if (g_input_type == PROMPT)
+			break ;
+		if (ft_isprint(key))
+			g_cursor = ft_straddchrinpos(key, g_cursor);
+		else
+		{
+			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
+			doctrld(key, 0);
+		}
+		ft_termmanager(g_input, g_cursor);
+	}
+	if (!ft_strisprint(g_input) || g_input_type == PROMPT)
+	{
+		if (g_input_type == PROMPT)
+			*x = 1;
+		ft_putchar('\n');
+		ft_strdel(&g_input);
+		return (NULL);
+	}
+	ft_cancel();
+	ft_putchar('\n');
+	return (g_input);
+}
+
+char		*readline4(char **history, int *x)
+{
+	int	key;
+	int i;
+
+	SAFE(g_input = ft_prepareinput());
+	g_cursor = ft_defaultcursor(&g_cursor);
+	i = ft_tablen(history) - 1;
+	ft_putterm("sc");
+	while ((key = ft_checkkey(ft_getch())) > 0)
+	{
+		if (g_input_type == PROMPT)
+			break ;
+		if (ft_isprint(key))
+			g_cursor = ft_straddchrinpos(key, g_cursor);
+		else
+		{
+			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
+			doctrld(key, 0);
+		}
+		ft_termmanager(g_input, g_cursor);
+	}
+	if (g_input_type == PROMPT)
+	{
+		*x = 1;
+		ft_putchar('\n');
+		ft_strdel(&g_input);
+		return (NULL);
+	}
+	ft_cancel();
+	ft_putchar('\n');
 	return (g_input);
 }
 
@@ -321,7 +390,8 @@ void		ft_shell(void)
 		ft_term_prepare(0);
 		if (!(input = readline(history)) || parseerror(input, 1))
 			continue ;
-		input = makecmdclear(input, history);
+		if (!(input = makecmdclear(input, history)))
+			continue ;
 		ft_term_prepare(1);
 		history = ft_addtotab(history, input);
 		if (!((cmds = createcmds(input))))

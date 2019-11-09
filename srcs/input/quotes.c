@@ -51,11 +51,13 @@ char	*ft_closequotes(char *cmd, char **history)
 			ft_putstr("bquote> ");
 		g_input_type = r;
 		if (!(input = readline2(history)))
-			continue ;
+		{
+			ft_strdel(&cmd);
+			return (NULL);
+		}
 		cmd = ft_strjoin_lite(cmd, input);
 		ft_strdel(&input);
 	}
 	cmd = ft_removeantin(cmd);
-
 	return (cmd);
 }
