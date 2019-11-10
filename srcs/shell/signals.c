@@ -25,6 +25,7 @@ void		ft_signal(int x)
 	if (x == SIGINT && g_pid == 0)
 	{
 		ft_cancel();
+		ft_cpy();
 		g_cursor = ft_defaultcursor(&g_cursor);
 		if (g_input_type == PROMPT)
 		{

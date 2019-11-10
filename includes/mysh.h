@@ -59,6 +59,11 @@
 # define ALTL 1146821403
 # define ALTU 1096489755
 # define ALTD 1113266971
+# define ALTC 42947
+# define ALTV 10127586
+# define ALTX 8948194
+# define ALTF 37574
+# define ALTG 43458
 # define CTRLD 4
 
 /*
@@ -97,6 +102,15 @@ typedef struct	s_cursor
 	int			pos;
 }				t_cursor;
 
+
+typedef struct	s_cpy
+{
+	char		*buffer;
+	int			p1;
+	int			p2;
+}				t_cpy;
+
+
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
 char			**g_environ;
@@ -105,6 +119,7 @@ int				g_input_type;
 char			*g_input;
 int				g_pipe;
 t_cursor		g_cursor;
+t_cpy			g_cpy;
 
 # define PROMPT 1
 # define SQ 39
@@ -269,4 +284,5 @@ int			doctrld(int key, int mode);
 int				ft_getcurpos(void);
 int 	ft_getcurpos2(void);
 int	ft_getlinelen(int y);
+void			ft_cpy();
 #endif

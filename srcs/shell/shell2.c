@@ -169,13 +169,77 @@ t_cursor		ft_altd(t_cursor cursor)
 
 /////////////////////////////
 
+t_cursor		ft_addstrtostr(char *str2, t_cursor cursor)
+{
+	int i;
+
+	i = 0;
+	while (str2[i])
+	{
+		cursor = ft_straddchrinpos(str2[i], cursor);
+		i++;
+	}
+	return (cursor);
+}
+
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	int c;
 	int f;
 
+	if (key == ALTF)
+	{
+		if (g_cpy.p2 > g_cpy.p1)
+		{
+			g_cpy.p2--;
+			cursor = ft_curleft(cursor, 1);
+		}
+		else
+			ft_cpy();
+	}
+	if (key == ALTG)
+	{
+		if (cursor.pos + 1 < (int)ft_strlen(g_input))
+		{
+			if (g_cpy.p1 == -1)
+				g_cpy.p1 = g_cursor.pos;
+			if (g_cpy.p2 == -1)
+				g_cpy.p2 = 1 + g_cursor.pos;
+			else
+				g_cpy.p2++;
+				cursor = ft_curright(cursor, 1);
+		}
+		return (cursor);
+	}
+	if (key == ALTC)
+	{
+		if (g_cpy.buffer)
+			ft_strdel(&g_cpy.buffer);
+		g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
+		ft_cpy();
+	}
+	if (key == ALTV)
+	{
+		ft_cpy();
+		if (g_cpy.buffer)
+		{
+			cursor = ft_addstrtostr(g_cpy.buffer, cursor);
+		}
+	}
+	/*
+	if (key == ALTX)
+	{
+		if (g_cpy.buffer)
+			ft_strdel(&g_cpy.buffer);
+		g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
+		ft_strclr(g_input);
+		cursor = ft_defaultcursor(&cursor);
+	}
+
+	*/
 	if (key == RIGHT)
 	{
+		ft_cpy();
 		if (cursor.pos < (int)ft_strlen(g_input))
 		{
 			cursor = ft_curright(cursor, 1);
@@ -184,6 +248,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == LEFT)
 	{
+		ft_cpy();
 		if (cursor.pos - 1 >= 0)
 		{
 			cursor = ft_curleft(cursor, 1);
@@ -192,6 +257,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == BACKSPACE)
 	{
+		ft_cpy();
 		if (cursor.pos > 0)
 		{
 			c = g_input[cursor.pos - 1];
@@ -211,6 +277,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == UP)
 	{
+		ft_cpy();
 		if (*i >= 0)
 		{
 			ft_strcpy(g_input, history[*i]);
@@ -223,6 +290,7 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == DOWN)
 	{
+		ft_cpy();
 		if (history[*i + 1])
 		{
 			(*i) = (*i) + 1;
@@ -239,27 +307,33 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	}
 	if (key == HOME)
 	{
+		ft_cpy();
 		cursor = ft_defaultcursor(&cursor);
 	}
 	if (key == END)
 	{
+		ft_cpy();
 		cursor = ft_defaultcursor(&cursor);
 		cursor = ft_curright(cursor, ft_strlen(g_input));
 	}
 	if (key == ALTR)
 	{
+		ft_cpy();
 		cursor = ft_altr(cursor);
 	}
 	if (key == ALTL)
 	{
+		ft_cpy();
 		cursor = ft_altl(cursor);
 	}
 	if (key == ALTU)
 	{
+		ft_cpy();
 		cursor = ft_altu(cursor);
 	}
 	if (key == ALTD)
 	{
+		ft_cpy();
 		cursor = ft_altd(cursor);
 	}
 	return (cursor);

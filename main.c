@@ -218,7 +218,11 @@ static char		**creation(char **table)
 	new = ft_tabdup(table);
 	return (new);
 }
-
+void			ft_cpy()
+{
+	g_cpy.p1 = -1;
+	g_cpy.p2 = -1;
+}
 int				main(void)
 {
 	extern char		**environ;

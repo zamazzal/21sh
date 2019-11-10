@@ -44,6 +44,20 @@ struct winsize	ft_winsize(void)
 	return (ts);
 }
 
+void	ft_selected(int i)
+{
+	if (i == g_cpy.p1)
+	{
+		ft_putterm("mr");
+		ft_putterm("us");
+	}
+	if (i == g_cpy.p2)
+	{
+		ft_putterm("me");
+		ft_putterm("ue");
+	}
+}
+
 int		ft_showstr(char *str)
 {
 	int i;
@@ -58,6 +72,7 @@ int		ft_showstr(char *str)
 	p = 0;
 	while (str[i] != '\0')
 	{
+		ft_selected(i);
 		if (str[i] != '\n')
 			ft_putchar(str[i]);
 		x++;
@@ -332,6 +347,7 @@ char		*readline(char **history)
 	g_cursor = ft_defaultcursor(&g_cursor);
 	i = ft_tablen(history) - 1;
 	ft_putterm("sc");
+	ft_cpy();
 	while ((key = ft_checkkey(ft_getch())) > 0)
 	{
 		if (ft_isprint(key))
@@ -344,6 +360,7 @@ char		*readline(char **history)
 		}
 		ft_termmanager(g_input, g_cursor);
 	}
+	ft_cpy();
 	if (!ft_strisprint(g_input))
 	{
 		ft_putchar('\n');

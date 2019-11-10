@@ -27,6 +27,7 @@ t_cursor	ft_straddchrinpos(char c, t_cursor cursor)
 	char *tmp;
 	char *tmp2;
 
+	ft_cpy();
 	tmp = ft_strdup(g_input);
 	tmp2 = ft_strsub(tmp, 0, cursor.pos);
 	ft_strclr(g_input);
