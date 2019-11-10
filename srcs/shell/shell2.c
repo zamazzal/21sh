@@ -234,17 +234,18 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 	{
 		ft_cpy();
 		if (g_cpy.buffer)
-		{
 			cursor = ft_addstrtostr(g_cpy.buffer, cursor);
-		}
 	}
 	if (key == ALTX)
 	{
-		if (g_cpy.buffer)
-			ft_strdel(&g_cpy.buffer);
-		g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
-		ft_cut();
-		cursor = ft_curleft(cursor, g_cpy.p2 - g_cpy.p1);
+		if (g_cpy.p2 > g_cpy.p1)
+		{
+			if (g_cpy.buffer)
+				ft_strdel(&g_cpy.buffer);
+			g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
+			ft_cut();
+			cursor = ft_curleft(cursor, g_cpy.p2 - g_cpy.p1);
+		}
 		ft_cpy();
 	}
 	if (key == RIGHT)
