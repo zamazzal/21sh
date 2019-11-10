@@ -103,8 +103,6 @@ t_cursor		ft_altu(t_cursor cursor)
 	return (cursor);
 }
 
-
-
 int	ft_getlines()
 {
 	int i;
@@ -135,7 +133,7 @@ int	ft_getlines()
 	}
 	return (f);
 }
-/////////////////// errors
+
 t_cursor		ft_altd(t_cursor cursor)
 {
 	struct winsize ts;
@@ -167,8 +165,6 @@ t_cursor		ft_altd(t_cursor cursor)
 	return (cursor);
 }
 
-/////////////////////////////
-
 t_cursor		ft_addstrtostr(char *str2, t_cursor cursor)
 {
 	int i;
@@ -180,6 +176,22 @@ t_cursor		ft_addstrtostr(char *str2, t_cursor cursor)
 		i++;
 	}
 	return (cursor);
+}
+
+void	ft_cut(void)
+{
+	char *s1;
+	char *s2;
+	char *s;
+
+	s1 = ft_strsub(g_input, 0, g_cpy.p1);
+	s2 = ft_strsub(g_input, g_cpy.p2, ft_strlen(g_input));
+	s = ft_strjoin(s1, s2);
+	ft_strclr(g_input);
+	ft_strdel(&s1);
+	ft_strdel(&s2);
+	g_input = ft_strcpy(g_input, s);
+	ft_strdel(&s);
 }
 
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
@@ -226,17 +238,15 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 			cursor = ft_addstrtostr(g_cpy.buffer, cursor);
 		}
 	}
-	/*
 	if (key == ALTX)
 	{
 		if (g_cpy.buffer)
 			ft_strdel(&g_cpy.buffer);
 		g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
-		ft_strclr(g_input);
-		cursor = ft_defaultcursor(&cursor);
+		ft_cut();
+		cursor = ft_curleft(cursor, g_cpy.p2 - g_cpy.p1);
+		ft_cpy();
 	}
-
-	*/
 	if (key == RIGHT)
 	{
 		ft_cpy();

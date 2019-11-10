@@ -35,6 +35,7 @@ int			doctrld(int key, int mode)
 {
 	if (key == CTRLD)
 	{
+		ft_cpy();
 		if (mode)
 		{
 			if (ft_ctrld(g_cursor.pos))
