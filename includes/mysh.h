@@ -40,7 +40,7 @@
 # define UNSETENV 4
 # define ENV 5
 # define EXIT 6
-# define BUFFER_SIZE 1024
+# define BUFFER_SIZE 8000
 
 /*
 **		Keys
@@ -64,6 +64,7 @@
 # define ALTX 8948194
 # define ALTF 37574
 # define ALTG 43458
+# define ALTA 42435
 # define CTRLD 4
 
 /*
@@ -127,7 +128,6 @@ t_cpy			g_cpy;
 # define BQ 96
 # define BS 92
 # define PIPE 124
-# define BUFFER_SIZE 1024
 
 # define PROMPTLINE 6
 # define BSPROMPT 2
@@ -269,8 +269,6 @@ int				ft_checkcinstr(char *ptr, int c);
 char			*ft_strjoin_lite(char *s1, char const *s2);
 char			*ft_strsub_lite(char *s, unsigned int start, size_t len);
 int				ft_tablen(char **array);
-int				ft_straddchr(char *str, char c);
-t_cursor		ft_straddchrinpos(char c, t_cursor cursor);
 char			*ft_strappend(char **a_s1, char c, int overwrite);
 int				quote_end(char *cmd, int start);
 char			*ft_strojoin(char **s1, char *s2, int overwrite);
@@ -278,6 +276,10 @@ void			ft_putintab(char ***a_chain, char *entry);
 int				ft_skipspaces(char *str);
 char			**ft_addtotab(char **tabl, char *str);
 
+
+t_cursor		ft_addstrtostr(char *str2, t_cursor cursor);
+char	*ft_straddchr(char *str, char c);
+t_cursor	ft_straddchrinpos(char c, t_cursor cursor);
 char		*readline4(char **history, int *x);
 char		*readline3(char **history, int *x);
 int			doctrld(int key, int mode);
@@ -285,4 +287,38 @@ int				ft_getcurpos(void);
 int 	ft_getcurpos2(void);
 int	ft_getlinelen(int y);
 void			ft_cpy();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t_cursor ft_right(t_cursor cursor);
+t_cursor ft_left(t_cursor cursor);
+t_cursor ft_home(t_cursor cursor);
+t_cursor ft_end(t_cursor cursor);
+
+
+t_cursor ft_up(int *i, t_cursor cursor, char **history);
+t_cursor ft_down(int *i, t_cursor cursor, char **history);
+
+
+t_cursor ft_backspace(t_cursor cursor);
+
+
+t_cursor    ft_altright(t_cursor cursor);
+t_cursor    ft_altleft(t_cursor cursor);
+
+void    ft_copy(void);
+t_cursor    ft_paste(t_cursor cursor);
+t_cursor    ft_altx(t_cursor cursor);
 #endif

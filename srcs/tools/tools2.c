@@ -12,32 +12,24 @@
 
 #include "mysh.h"
 
-int		ft_straddchr(char *str, char c)
+char	*ft_straddchr(char *str, char c)
 {
+	char *new;
 	int i;
+	int len;
 
-	i = ft_strlen(str);
-	str[i++] = c;
-	str[i] = '\0';
-	return (1);
-}
-
-t_cursor	ft_straddchrinpos(char c, t_cursor cursor)
-{
-	char *tmp;
-	char *tmp2;
-
-	ft_cpy();
-	tmp = ft_strdup(g_input);
-	tmp2 = ft_strsub(tmp, 0, cursor.pos);
-	ft_strclr(g_input);
-	ft_strcpy(g_input, tmp2);
-	ft_straddchr(g_input, c);
-	ft_strcat(g_input, &tmp[cursor.pos]);
-	free(tmp);
-	free(tmp2);
-	cursor = ft_curright(cursor, 1);
-	return (cursor);
+	len = ft_strlen(str);
+	new = ft_strnew(len + 1);
+	i = 0;
+	while (i < len)
+	{
+		new[i] = str[i];
+		i++;
+	}
+	new[i++] = c;
+	new[i] = '\0';
+	ft_strdel(&str);
+	return (new);
 }
 
 void	double_free(char *dead1, char **dead2)

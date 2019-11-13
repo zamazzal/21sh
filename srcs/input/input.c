@@ -55,7 +55,7 @@ char				*makecmdclear(char *cmd, char **history)
 	while ((r = ft_checkcmdform(cmd)))
 	{
 		if (x == 0 && r == 1)
-			ft_straddchr(cmd, '\n');
+			cmd = ft_straddchr(cmd, '\n');
 		if (r == 1)
 		{
 			if (!(cmd = ft_closequotes(cmd, history)))

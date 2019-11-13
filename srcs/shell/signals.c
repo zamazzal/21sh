@@ -16,7 +16,8 @@ void		ft_cancel(void)
 {
 	ft_putterm("rc");
 	g_cursor = ft_defaultcursor(&g_cursor);
-	g_cursor = ft_curright(g_cursor, ft_strlen(g_input));
+	if (g_input)
+		g_cursor = ft_curright(g_cursor, ft_strlen(g_input));
 	ft_current_cursor(g_cursor);
 }
 
@@ -36,7 +37,7 @@ void		ft_signal(int x)
 			ioctl(0, TIOCSTI, "\12");
 			g_input_type = PROMPT;
 		}
-		ft_strclr(g_input);
+		ft_strdel(&g_input);
 		ft_putterm("sc");
 	}
 	if (g_pid == 1)

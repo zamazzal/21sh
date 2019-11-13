@@ -12,13 +12,48 @@
 
 #include "mysh.h"
 
-static int	ft_getch(void)
+int				ft_checkkey(int i)
 {
-	int key;
+	if (i == DOWN || i == RIGHT || i == LEFT || i == UP)
+		return (i);
+	if (i == ENTRE || i == ESC || i == BACKSPACE || i == CTRLD)
+		return (i);
+	if (i == HOME || i == END)
+		return (i);
+	if (i == ALTR || i == ALTL || i == ALTU || i == ALTD)
+		return (i);
+	if (i == ALTC || i == ALTV || i == ALTX || i == ALTF)
+		return (i);
+	if (i == ALTG || i == ALTA)
+		return (i);
+	return (0);
+}
 
-	key = 0;
-	read(0, &key, sizeof(int));
-	return (key);
+int			ft_readx()
+{
+	char *buff;
+	int key;
+	int r;
+
+	buff = ft_strnew(BUFFER_SIZE);
+	r = read(0, buff, BUFFER_SIZE);
+	buff[r] = '\0';
+	key = (*(int*)buff);
+	if (ft_checkkey(key))
+	{
+		ft_strdel(&buff);
+		return (key);
+	}
+	else
+	{
+		if (g_input)
+			ft_addstrtostr(buff, g_cursor);
+		else
+			g_input = ft_strdup(buff);
+		g_cursor = ft_curright(g_cursor, r);
+	}
+	ft_strdel(&buff);
+	return (0);
 }
 
 t_cursor	ft_defaultcursor(t_cursor *cursor)
@@ -27,13 +62,6 @@ t_cursor	ft_defaultcursor(t_cursor *cursor)
 	(*cursor).x = 0;
 	(*cursor).y = 0;
 	return (*cursor);
-}
-
-static int	ft_checkkey(int c)
-{
-	if (c == 10)
-		return (0);
-	return (c);
 }
 
 struct winsize	ft_winsize(void)
@@ -95,12 +123,6 @@ int		ft_showstr(char *str)
 		i++;
 	}
 	return (p);
-}
-
-int		ft_readshow(char *cmd)
-{
-	ft_putterm("cd");
-	return (ft_showstr(cmd));
 }
 
 int			ft_promptlen(void)
@@ -229,7 +251,9 @@ void ft_termmanager(char *g_input, t_cursor g_cursor)
 	y = 0;
 	ft_putterm("rc");
 	ft_putterm("sc");
-	y = ft_readshow(g_input);
+	ft_putterm("cd");
+	if (g_input)
+		y = ft_showstr(g_input);
 	ft_putterm("rc");
 	ft_cursmove('u', y);
 	ft_putterm("sc");
@@ -241,17 +265,15 @@ char		*readline2(char **history)
 	int	key;
 	int i;
 
-	SAFE(g_input = ft_prepareinput());
 	g_cursor = ft_defaultcursor(&g_cursor);
 	i = ft_tablen(history) - 1;
+	ft_cpy();
 	ft_putterm("sc");
-	while ((key = ft_checkkey(ft_getch())) > 0)
+	while ((key = ft_checkkey(ft_readx())) != ENTRE)
 	{
 		if (g_input_type == PROMPT)
 			break ;
-		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor);
-		else
+		if (ft_checkkey(key))
 		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 			doctrld(key, 0);
@@ -264,7 +286,7 @@ char		*readline2(char **history)
 		ft_strdel(&g_input);
 		return (NULL);
 	}
-	ft_straddchr(g_input, '\n');
+	g_input = ft_straddchr(g_input, '\n');
 	ft_cancel();
 	return (g_input);
 }
@@ -274,17 +296,15 @@ char		*readline3(char **history, int *x)
 	int	key;
 	int i;
 
-	SAFE(g_input = ft_prepareinput());
 	g_cursor = ft_defaultcursor(&g_cursor);
 	i = ft_tablen(history) - 1;
+	ft_cpy();
 	ft_putterm("sc");
-	while ((key = ft_checkkey(ft_getch())) > 0)
+	while ((key = ft_checkkey(ft_readx())) != ENTRE)
 	{
 		if (g_input_type == PROMPT)
 			break ;
-		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor);
-		else
+		if (ft_checkkey(key))
 		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 			doctrld(key, 0);
@@ -309,17 +329,15 @@ char		*readline4(char **history, int *x)
 	int	key;
 	int i;
 
-	SAFE(g_input = ft_prepareinput());
 	g_cursor = ft_defaultcursor(&g_cursor);
 	i = ft_tablen(history) - 1;
+	ft_cpy();
 	ft_putterm("sc");
-	while ((key = ft_checkkey(ft_getch())) > 0)
+	while ((key = ft_checkkey(ft_readx())) != ENTRE)
 	{
 		if (g_input_type == PROMPT)
 			break ;
-		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor);
-		else
+		if (ft_checkkey(key))
 		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 			doctrld(key, 0);
@@ -343,16 +361,13 @@ char		*readline(char **history)
 	int	key;
 	int i;
 
-	SAFE(g_input = ft_prepareinput());
 	g_cursor = ft_defaultcursor(&g_cursor);
 	i = ft_tablen(history) - 1;
-	ft_putterm("sc");
 	ft_cpy();
-	while ((key = ft_checkkey(ft_getch())) > 0)
+	ft_putterm("sc");
+	while ((key = ft_checkkey(ft_readx())) != ENTRE)
 	{
-		if (ft_isprint(key))
-			g_cursor = ft_straddchrinpos(key, g_cursor);
-		else
+		if (ft_checkkey(key))
 		{
 			g_cursor = ft_checknoprint(key, g_cursor, history, &i);
 			if (doctrld(key, 1))
@@ -389,6 +404,7 @@ char	**ft_addtotab(char **tabl, char *str)
 	}
 	new[i] = ft_strdup(str);
 	new[++i] = NULL;
+	free(tabl);
 	return (new);
 }
 
@@ -405,7 +421,7 @@ void		ft_shell(void)
 		ft_prompt();
 		g_input_type = PROMPT;
 		ft_term_prepare(0);
-		if (!(input = readline(history)) || parseerror(input, 1))
+		if (!(input = ft_strdup(readline(history))) || parseerror(input, 1))
 			continue ;
 		if (!(input = makecmdclear(input, history)))
 			continue ;
@@ -416,7 +432,9 @@ void		ft_shell(void)
 		if (ft_putcmds(cmds))
 			break ;
 		ft_endinput(cmds, input);
+		ft_strdel(&g_input);
 	}
 	ft_endinput(cmds, input);
+	ft_strdel(&g_input);
 	ft_freetable(&history);
 }

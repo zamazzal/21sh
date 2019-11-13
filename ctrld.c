@@ -14,20 +14,24 @@
 
 static int		ft_ctrld2(int pos)
 {
-	if (*g_input == '\0')
+	if (!g_input)
 		return (0);
 	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
+	if (*g_input == '\0')
+            ft_strdel(&g_input);
 	return (0);
 }
 
 static int		ft_ctrld(int pos)
 {
-	if (*g_input == '\0')
+	if (!g_input)
 	{
-		ft_strcpy(g_input, "exit");
+		g_input = ft_strdup("exit");
 		return (1);
 	}
 	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
+	if (*g_input == '\0')
+        ft_strdel(&g_input);
 	return (0);
 }
 

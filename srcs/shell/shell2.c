@@ -60,6 +60,7 @@ t_cursor		ft_altr(t_cursor cursor)
 {
 	int x;
 
+	ft_cpy();
 	x = ft_getnextpos(g_input, cursor.pos);
 	if (x != -1)
 	{
@@ -72,6 +73,7 @@ t_cursor		ft_altl(t_cursor cursor)
 {
 	int x;
 
+	ft_cpy();
 	x = ft_getlastpos(g_input, cursor.pos);
 	if (x != -1)
 	{
@@ -86,6 +88,7 @@ t_cursor		ft_altu(t_cursor cursor)
 	int prompt;
 	int x;
 
+	ft_cpy();
 	ts = ft_winsize();
 	prompt = ft_promptlen();
 	if (cursor.y > 0)
@@ -146,6 +149,7 @@ t_cursor		ft_altd(t_cursor cursor)
 	len = ft_strlen(g_input);
 	prompt = ft_promptlen();
 	x = ft_getlines();
+	ft_cpy();
 	if (cursor.y < x - 1)
 	{
 		cursor.pos += ft_getlinelen(cursor.y) - cursor.x;
@@ -165,198 +169,41 @@ t_cursor		ft_altd(t_cursor cursor)
 	return (cursor);
 }
 
-t_cursor		ft_addstrtostr(char *str2, t_cursor cursor)
-{
-	int i;
-
-	i = 0;
-	while (str2[i])
-	{
-		cursor = ft_straddchrinpos(str2[i], cursor);
-		i++;
-	}
-	return (cursor);
-}
-
-void	ft_cut(void)
-{
-	char *s1;
-	char *s2;
-	char *s;
-
-	s1 = ft_strsub(g_input, 0, g_cpy.p1);
-	s2 = ft_strsub(g_input, g_cpy.p2, ft_strlen(g_input));
-	s = ft_strjoin(s1, s2);
-	ft_strclr(g_input);
-	ft_strdel(&s1);
-	ft_strdel(&s2);
-	g_input = ft_strcpy(g_input, s);
-	ft_strdel(&s);
-}
-
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
-	int c;
-	int f;
-
 	if (key == ALTF)
-	{
-		if (g_cpy.p2 > g_cpy.p1)
-		{
-			g_cpy.p2--;
-			cursor = ft_curleft(cursor, 1);
-		}
-		else
-			ft_cpy();
-	}
+		cursor = ft_altleft(cursor);
 	if (key == ALTG)
-	{
-		if (cursor.pos + 1 < (int)ft_strlen(g_input))
-		{
-			if (g_cpy.p1 == -1)
-				g_cpy.p1 = g_cursor.pos;
-			if (g_cpy.p2 == -1)
-				g_cpy.p2 = 1 + g_cursor.pos;
-			else
-				g_cpy.p2++;
-				cursor = ft_curright(cursor, 1);
-		}
-		return (cursor);
-	}
+		cursor = ft_altright(cursor);
 	if (key == ALTC)
-	{
-		if (g_cpy.buffer)
-			ft_strdel(&g_cpy.buffer);
-		g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
-		ft_cpy();
-	}
+		ft_copy();
 	if (key == ALTV)
-	{
-		ft_cpy();
-		if (g_cpy.buffer)
-			cursor = ft_addstrtostr(g_cpy.buffer, cursor);
-	}
+		cursor = ft_paste(cursor);
 	if (key == ALTX)
-	{
-		if (g_cpy.p2 > g_cpy.p1)
-		{
-			if (g_cpy.buffer)
-				ft_strdel(&g_cpy.buffer);
-			g_cpy.buffer = ft_strsub(g_input, g_cpy.p1, g_cpy.p2 - g_cpy.p1);
-			ft_cut();
-			cursor = ft_curleft(cursor, g_cpy.p2 - g_cpy.p1);
-		}
-		ft_cpy();
-	}
-	if (key == RIGHT)
-	{
-		ft_cpy();
-		if (cursor.pos < (int)ft_strlen(g_input))
-		{
-			cursor = ft_curright(cursor, 1);
-		}
-		return (cursor);
-	}
-	if (key == LEFT)
-	{
-		ft_cpy();
-		if (cursor.pos - 1 >= 0)
-		{
-			cursor = ft_curleft(cursor, 1);
-		}
-		return (cursor);
-	}
+		cursor = ft_altx(cursor);
 	if (key == BACKSPACE)
-	{
-		ft_cpy();
-		if (cursor.pos > 0)
-		{
-			c = g_input[cursor.pos - 1];
-			if (c == '\n')
-			{
-				f = cursor.pos;
-				cursor = ft_curleft(cursor, 1);
-				ft_strcpy(&g_input[f - 1], &g_input[f]);
-			}
-			else
-			{
-				ft_strcpy(&g_input[cursor.pos - 1], &g_input[cursor.pos]);
-				cursor = ft_curleft(cursor, 1);
-			}
-		}
-		return (cursor);
-	}
+		cursor = ft_backspace(cursor);
 	if (key == UP)
-	{
-		ft_cpy();
-		if (*i >= 0)
-		{
-			ft_strcpy(g_input, history[*i]);
-			cursor = ft_defaultcursor(&cursor);
-			cursor = ft_curright(cursor, ft_strlen(g_input));
-			if (*i > 0)
-				(*i) = (*i) - 1;
-		}
-		return (cursor);
-	}
+		cursor = ft_up(i, cursor, history);
 	if (key == DOWN)
-	{
-		ft_cpy();
-		if (history[*i + 1])
-		{
-			(*i) = (*i) + 1;
-			ft_strcpy(g_input, history[*i]);
-			cursor = ft_defaultcursor(&cursor);
-			cursor = ft_curright(cursor, ft_strlen(g_input));
-		}
-		else
-		{
-			ft_strclr(g_input);
-			cursor = ft_defaultcursor(&cursor);
-		}
-		return (cursor);
-	}
+		cursor = ft_down(i, cursor, history);
+	if (key == RIGHT)
+		cursor = ft_right(cursor);
+	if (key == LEFT)
+		cursor = ft_left(cursor);
 	if (key == HOME)
-	{
-		ft_cpy();
-		cursor = ft_defaultcursor(&cursor);
-	}
+		cursor = ft_home(cursor);
 	if (key == END)
-	{
-		ft_cpy();
-		cursor = ft_defaultcursor(&cursor);
-		cursor = ft_curright(cursor, ft_strlen(g_input));
-	}
+		cursor = ft_end(cursor);
 	if (key == ALTR)
-	{
-		ft_cpy();
 		cursor = ft_altr(cursor);
-	}
 	if (key == ALTL)
-	{
-		ft_cpy();
 		cursor = ft_altl(cursor);
-	}
 	if (key == ALTU)
-	{
-		ft_cpy();
 		cursor = ft_altu(cursor);
-	}
 	if (key == ALTD)
-	{
-		ft_cpy();
 		cursor = ft_altd(cursor);
-	}
 	return (cursor);
-}
-
-char	*ft_prepareinput(void)
-{
-	char			*input;
-
-	SAFE(input = ft_strnew(BUFFER_SIZE));
-	ft_strclr(input);
-	return (input);
 }
 
 void	ft_endinput(char **cmds, char *input)
