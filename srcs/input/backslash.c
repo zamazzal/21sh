@@ -35,7 +35,6 @@ int				ft_checkbackslash(char *cmd)
 char			*ft_endbackslash(char *cmd, char **history)
 {
 	int		r;
-	char	*input;
 	int		len;
 	int x;
 
@@ -44,7 +43,7 @@ char			*ft_endbackslash(char *cmd, char **history)
 	{
 		ft_putstr("> ");
 		g_input_type = BS;
-		if (!(input = readline4(history, &x)))
+		if (!(g_input = readline4(history, &x)))
 		{
 			if (x == 1)
 			{
@@ -55,13 +54,13 @@ char			*ft_endbackslash(char *cmd, char **history)
 		}
 		len = ft_strlen(cmd);
 		if (len > 1)
-			cmd = ft_strjoin_lite(ft_strsub_lite(cmd, 0, len - 1), input);
+			cmd = ft_strjoin_lite(ft_strsub_lite(cmd, 0, len - 1), g_input);
 		else
 		{
 			ft_strdel(&cmd);
-			cmd = ft_strdup(input);
+			cmd = ft_strdup(g_input);
 		}
-		ft_strdel(&input);
+		ft_strdel(&g_input);
 	}
 	return (cmd);
 }

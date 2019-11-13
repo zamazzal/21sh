@@ -12,12 +12,24 @@
 
 #include "mysh.h"
 
+char	*ft_strdupc(char c)
+{
+	char *new;
+
+	new = ft_strnew(1);
+	new[0] = c;
+	new[1] = '\0';
+	return (new);
+}
+
 char	*ft_straddchr(char *str, char c)
 {
 	char *new;
 	int i;
 	int len;
 
+	if (!str)
+		return (ft_strdupc(c));
 	len = ft_strlen(str);
 	new = ft_strnew(len + 1);
 	i = 0;

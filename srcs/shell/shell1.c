@@ -423,6 +423,7 @@ void		ft_shell(void)
 		ft_term_prepare(0);
 		if (!(input = ft_strdup(readline(history))) || parseerror(input, 1))
 			continue ;
+		ft_strdel(&g_input);
 		if (!(input = makecmdclear(input, history)))
 			continue ;
 		ft_term_prepare(1);
@@ -432,9 +433,7 @@ void		ft_shell(void)
 		if (ft_putcmds(cmds))
 			break ;
 		ft_endinput(cmds, input);
-		ft_strdel(&g_input);
 	}
 	ft_endinput(cmds, input);
-	ft_strdel(&g_input);
 	ft_freetable(&history);
 }

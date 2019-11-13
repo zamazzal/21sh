@@ -18,7 +18,7 @@ int		ft_tablen(char **array)
 
 	len = 0;
 	if (!array)
-		return (len);
+		return (0);
 	while (array[len] != NULL)
 		len++;
 	return (len);

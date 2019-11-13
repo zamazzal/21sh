@@ -44,7 +44,6 @@ int		ft_checkpipe(char *cmd)
 char	*ft_closepipe(char *cmd, char **history)
 {
 	int		r;
-	char	*input;
 	int x;
 
 	g_pipe = 1;
@@ -53,7 +52,7 @@ char	*ft_closepipe(char *cmd, char **history)
 	{
 		ft_putnstr("pipe> ", g_pipe);
 		g_input_type = PIPE;
-		if (!(input = readline3(history, &x)))
+		if (!(g_input = readline3(history, &x)))
 		{
 			if (x == 1)
 			{
@@ -63,9 +62,9 @@ char	*ft_closepipe(char *cmd, char **history)
 			continue ;
 		}
 		g_pipe++;
-		input = ft_removeantin(input);
-		cmd = ft_strjoin_lite(cmd, input);
-		ft_strdel(&input);
+		g_input = ft_removeantin(g_input);
+		cmd = ft_strjoin_lite(cmd, g_input);
+		ft_strdel(&g_input);
 	}
 	return (cmd);
 }

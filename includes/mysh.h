@@ -287,7 +287,7 @@ int				ft_getcurpos(void);
 int 	ft_getcurpos2(void);
 int	ft_getlinelen(int y);
 void			ft_cpy();
-
+char	*ft_strdupc(char c);
 
 
 
