@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strappend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/05 14:54:23 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/11 16:38:44 by aihya            ###   ########.fr       */
+/*   Created: 2019/05/13 17:29:09 by aihya             #+#    #+#             */
+/*   Updated: 2019/11/11 16:20:26 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-size_t	ft_strlen(const char *s)
+char	*ft_strappend(char **a_s1, char c, int overwrite)
 {
-	size_t i;
+	char	*new;
+	int		i;
 
+	if ((new = (char *)malloc(sizeof(char) * (ft_strlen(*a_s1) + 2))) == NULL)
+		return (NULL);
 	i = 0;
-	while (s && s[i] != '\0')
+	while (*a_s1 && (*a_s1)[i])
+	{
+		new[i] = (*a_s1)[i];
 		i++;
-	return (i);
+	}
+	new[i] = c;
+	new[++i] = '\0';
+	if (overwrite == 1)
+	{
+		free(*a_s1);
+		*a_s1 = new;
+		return (NULL);
+	}
+	return (new);
 }

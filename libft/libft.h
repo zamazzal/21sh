@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zamazzal <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/06 18:29:41 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/14 18:41:11 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/11 14:51:11 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+char				*ft_strappend(char **a_s1, char c, int overwrite);
+size_t				ft_chain_size(char **chain);
+void				ft_chain_free(char ***a_chain);
+char				*ft_strrev(char const *s);
+int					ft_strisnum(char *str);
 int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
 int					ft_isalnum(int c);
@@ -90,6 +95,4 @@ char				*ft_strupper(char *str);
 char				*ft_strndup(const char *s1, size_t n);
 char				*ft_goodstr(char *str);
 size_t				ft_lstlen(t_list *lst);
-char				*ft_strrev(char const *s);
-int					ft_strisnum(char *str);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strisnum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
+/*   By: aihya <aihya@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/14 18:42:50 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/14 18:43:13 by zamazzal         ###   ########.fr       */
+/*   Created: 2019/10/25 18:53:56 by aihya             #+#    #+#             */
+/*   Updated: 2019/10/25 18:54:00 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,3 @@ int		ft_strisnum(char *str)
 	}
 	return (1);
 }
-

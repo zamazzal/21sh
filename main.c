@@ -81,14 +81,14 @@ void			ft_closepipes(int **pipes, int piplen)
 	free(pipes);
 }
 
-int			putcmd(char **cmd, int i, t_info info)
+int			putcmd(char *cmd, char **cmds, t_info info)
 {
 	char **argv;
 
-	argv = ms_parse(cmd[i]);
+	argv = ms_parse(cmd);
 	if (!(ft_builtins(ctables(argv), info)))
 	{
-		ft_freetable(&cmd);
+		ft_freetable(&cmds);
 		ft_freetable(&argv);
 		return (1);
 	}
@@ -102,14 +102,17 @@ void		ft_inputdone(int fd)
 	close(fd);
 }
 
-int		ft_pipe(int *fd)
+int		ft_pipe(int *fd, int f)
 {
 	int p[2];
 
 	if (pipe(p) == -1)
 		return (-1);
 	*fd = p[0];
-	dup2(p[1], 1);
+	if (f != -1)
+		dup2(p[1], f);
+	else
+		dup2(p[1], 1);
 	close(p[1]);
 	return (p[1]);
 }
@@ -157,41 +160,66 @@ static int		ft_putcmd(char *cmd)
 {
 	char **cmds;
 	int i;
-	int f[2];
+	int f[3];
 	int p[2];
 	t_info	info;
+	t_afterred	red;
+	int		status;
+	int		*fd_buf;
 
 	if (!(cmds = ft_cmdsplit(cmd, '|')))
 		return (1);
 	i = 0;
 	f[0] = dup(0);
 	f[1] = dup(1);
+	f[2] = dup(2);
 	info.fd = -1;
 	info.mode = (ft_tablen(cmds) > 1) ? 1 : 0;
+	fd_buf = NULL;
 	while (cmds[i] != NULL)
 	{
+		//ft_putendl("xxxxx0xxxxxxx");
+		// add a parameter to help close opened file descriptors
+		append_fd_buf(&fd_buf, -1);
+		status = 0;
+		//ft_putendl("xxxxx1xxxxxxx");
 		///////////////// * Redirections * /////////////////
-		if (ft_checkred(cmds[i]))
+		red = exec_reds(cmds[i], &status, &fd_buf);
+		if (red.cmd == NULL)
 		{
-			ft_putendl(cmds[i++]);
-			continue;
+			if (status == -1 && !(status = 0))
+			{
+				close_fd_buf(&fd_buf);
+				break ;
+			}
 		}
+		//ft_putendl("xxxxxxx2xxxxxx");
 		///////////////// * PIPE * /////////////////
 		if (i > 0)
 			ft_inputdone(p[0]);
 		if (cmds[i + 1] != NULL)
 		{
-			if ((p[1] = ft_pipe(&info.fd)) == -1)
+			if ((p[1] = ft_pipe(&info.fd, red.fd)) == -1)
 				return (1);
 			p[0] = info.fd;
 		}
 		else
-			dup2(f[1], 1);
+		{
+			if (red.fd == -1)
+				dup2(f[1], 1);
+			else
+				dup2(f[1], red.fd);
+		}
+		//ft_putendl("xxxxxxx3xxxxxx");
 		///////////////// * PARSE & PUTCMD * /////////////////
-		if (putcmd(cmds, i, info))
+		if (putcmd(red.cmd, cmds, info))
 			return (1);
+		//ft_putendl("xxxxxx4xxxxxxx");
+		close_fd_buf(&fd_buf);
 		i++;
 	}
+	dup2(f[1], 1);
+	dup2(f[2], 2);
 	ft_endcmds(cmds, f[0]);
 	return (0);
 }

@@ -12,7 +12,7 @@
 
 #include "mysh.h"
 
-static int		count_red(char *cmd, int start, int same)
+int		count_red(char *cmd, int start, int same)
 {
 	int		i;
 	int		c;

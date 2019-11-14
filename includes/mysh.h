@@ -112,6 +112,23 @@ typedef struct	s_cpy
 }				t_cpy;
 
 
+typedef struct	s_red
+{
+	char			*right;
+	char			*left;
+	char			*o_right;
+	char			*o_left;
+	unsigned int	type:2;
+	int				pos;
+	struct s_red	*next;
+}				t_red;
+
+typedef	struct	s_afterred
+{
+	int 	fd;
+	char	*cmd;
+}				t_afterred;
+
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
 char			**g_environ;
@@ -128,6 +145,13 @@ t_cpy			g_cpy;
 # define BQ 96
 # define BS 92
 # define PIPE 124
+
+#define LS 0
+#define LD 1
+#define RS 2
+#define RD 3
+
+#define POS_MAX_LEN 1024
 
 # define PROMPTLINE 6
 # define BSPROMPT 2
@@ -321,4 +345,35 @@ t_cursor    ft_altleft(t_cursor cursor);
 void    ft_copy(void);
 t_cursor    ft_paste(t_cursor cursor);
 t_cursor    ft_altx(t_cursor cursor);
+
+
+
+
+
+
+int				ft_getcurpos(void);
+
+int     quote_end(char *cmd, int start);
+int     count_red(char *cmd, int start, int same);
+void	print_red(t_red *red);
+int     **get_reds_positions(char *cmd);
+char    *get_clean_cmd(char *cmd, t_red *reds);
+void	clean_reds_wings(t_red *reds);
+t_afterred exec_reds(char *cmd, int *status, int **fd_buf);
+int		valid_right_chars(char *right);
+int     valid_left_chars(char *left, int type);
+int		exec_rs_red(t_red *red, int *fd);
+int		exec_rd_red(t_red *red, int *fd);
+int		exec_ls_red(t_red *red, int *fd);
+int		test_fd(int fd);
+int		redirect_ltor(int left_fd, char *buf, int close_right, int *fd);
+int		open_file(char *path, int oflag);
+int		ambiguous_red(t_red *red);
+char	*ms_expand_arg(char *arg);
+void	clean_reds_wings(t_red *reds);
+void	print_red(t_red *red);
+void	ms_set_quote(int *quoted, char *quote, char c);
+t_red	*extract_reds(char *cmd);
+void	append_fd_buf(int **fd_buf, int fd);
+void	close_fd_buf(int **fd_buf);
 #endif

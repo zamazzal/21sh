@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_chain_size.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/05 14:54:23 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/11 16:38:44 by aihya            ###   ########.fr       */
+/*   Created: 2019/05/12 12:48:49 by aihya             #+#    #+#             */
+/*   Updated: 2019/06/30 15:52:29 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdio.h>
 
-size_t	ft_strlen(const char *s)
+size_t	ft_chain_size(char **chain)
 {
-	size_t i;
+	size_t	size;
 
-	i = 0;
-	while (s && s[i] != '\0')
-		i++;
-	return (i);
+	if (chain == NULL)
+		return (0);
+	size = 0;
+	while (chain[size] != NULL)
+		size++;
+	return (size);
 }
