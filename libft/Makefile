@@ -6,7 +6,7 @@
 #    By: zamazzal <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/06 19:38:09 by zamazzal          #+#    #+#              #
-#    Updated: 2019/11/14 18:40:23 by zamazzal         ###   ########.fr        #
+#    Updated: 2019/11/14 18:45:46 by zamazzal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJS = ft_atoi.o ft_bzero.o ft_goodstr.o ft_isalnum.o ft_isalpha.o ft_isascii.o 
 ft_lstdel.o ft_lstdelone.o ft_lstiter.o ft_lstmap.o ft_lstnew.o ft_memalloc.o ft_memccpy.o ft_memchr.o ft_memcmp.o ft_memcpy.o ft_memdel.o ft_memmove.o ft_memset.o ft_nbrlen.o ft_putchar.o ft_putchar_fd.o \
 ft_putendl.o ft_putendl_fd.o ft_putnbr.o ft_putnbr_fd.o ft_putstr.o ft_putstr_fd.o ft_puttables.o ft_strcat.o ft_strchr.o ft_strclr.o ft_strcmp.o ft_strcpy.o ft_strdel.o ft_strdup.o ft_strequ.o ft_striter.o \
 ft_striteri.o ft_strjoin.o ft_strlcat.o ft_strlen.o ft_strlwr.o ft_strmap.o ft_strmapi.o ft_strncat.o ft_strncmp.o ft_strncpy.o ft_strndup.o ft_strnequ.o ft_strnew.o ft_strnstr.o ft_strrchr.o ft_strsplit.o \
-ft_strstr.o ft_strsub.o ft_strtrim.o ft_strupper.o ft_tolower.o ft_toupper.o ft_lstlen.o ft_strisnum.c ft_strrev.c
+ft_strstr.o ft_strsub.o ft_strtrim.o ft_strupper.o ft_tolower.o ft_toupper.o ft_lstlen.o ft_strisnum.o ft_strrev.o
 
 all : $(NAME)
 
