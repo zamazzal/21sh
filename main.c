@@ -102,14 +102,17 @@ void		ft_inputdone(int fd)
 	close(fd);
 }
 
-int		ft_pipe(int *fd)
+int		ft_pipe(int *fd, int f)
 {
 	int p[2];
 
 	if (pipe(p) == -1)
 		return (-1);
 	*fd = p[0];
-	dup2(p[1], 1);
+	if (f != -1)
+		dup2(p[1], f);
+	else
+		dup2(p[1], 1);
 	close(p[1]);
 	return (p[1]);
 }
@@ -166,11 +169,14 @@ static int		ft_putcmd(char *cmd)
 	fd_buf = NULL;
 	while (cmds[i] != NULL)
 	{
+		//ft_putendl("xxxxx0xxxxxxx");
 		// add a parameter to help close opened file descriptors
 		append_fd_buf(&fd_buf, -1);
 		status = 0;
+		//ft_putendl("xxxxx1xxxxxxx");
 		///////////////// * Redirections * /////////////////
-		if ((red = exec_reds(cmds[i], &status, &fd_buf)) == NULL)
+		red = exec_reds(cmds[i], &status, &fd_buf);
+		if (red.cmd == NULL)
 		{
 			if (status == -1 && !(status = 0))
 			{
@@ -178,20 +184,28 @@ static int		ft_putcmd(char *cmd)
 				break ;
 			}
 		}
+		//ft_putendl("xxxxxxx2xxxxxx");
 		///////////////// * PIPE * /////////////////
 		if (i > 0)
 			ft_inputdone(p[0]);
 		if (cmds[i + 1] != NULL)
 		{
-			if ((p[1] = ft_pipe(&info.fd)) == -1)
+			if ((p[1] = ft_pipe(&info.fd, red.fd)) == -1)
 				return (1);
 			p[0] = info.fd;
 		}
-	//	else
-	//		dup2(f[1], 1);
+		else
+		{
+			if (red.fd == -1)
+				dup2(f[1], 1);
+			else
+				dup2(f[1], red.fd);
+		}
+		//ft_putendl("xxxxxxx3xxxxxx");
 		///////////////// * PARSE & PUTCMD * /////////////////
 		if (putcmd(red.cmd, cmds, info))
 			return (1);
+		//ft_putendl("xxxxxx4xxxxxxx");
 		close_fd_buf(&fd_buf);
 		i++;
 	}

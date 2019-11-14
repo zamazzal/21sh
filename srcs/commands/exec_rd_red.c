@@ -1,6 +1,6 @@
 #include "mysh.h"
 
-int     exec_rd_red(t_red *red)
+int     exec_rd_red(t_red *red, int *fd)
 {
 	int     right_fd;
 	int     left_fd;
@@ -11,5 +11,7 @@ int     exec_rd_red(t_red *red)
 		return (-1);
 	left_fd = red->left == NULL ? 1 : ft_atoi(red->left);
 	dup2(right_fd, left_fd);
+	if (left_fd == 1)
+		*fd = right_fd;
 	return (0);
 }

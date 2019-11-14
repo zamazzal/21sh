@@ -1,6 +1,6 @@
 #include "mysh.h"
 
-static int	exec_on_ampersand(t_red *red)
+static int	exec_on_ampersand(t_red *red, int *fd)
 {
 //	int		right_fd;
 	int		left_fd;
@@ -14,21 +14,21 @@ static int	exec_on_ampersand(t_red *red)
 	red->right = red->right + i;
 	len = ft_strlen(red->right);
 	left_fd = red->left == NULL ? 0 : ft_atoi(red->left);
-	if (redirect_ltor(left_fd, red->right, 0) == -1)
+	if (redirect_ltor(left_fd, red->right, 0, fd) == -1)
 		return (-1);
 	else if (red->right[0] == '-')
 		close(left_fd);
 	else if (red->right[len - 1] == '-')
 	{
 		buf = ft_strsub(red->right, 0, len);
-		return (redirect_ltor(left_fd, buf, 1) == -1 ? -1 : ambiguous_red(red));
+		return (redirect_ltor(left_fd, buf, 1, fd) == -1 ? -1 : ambiguous_red(red));
 	}
 	else
 		ambiguous_red(red);
 	return (0);
 }
 
-int     exec_ls_red(t_red *red)
+int     exec_ls_red(t_red *red, int *fd)
 {
 	int     right_fd;
 	int     left_fd;
@@ -44,8 +44,10 @@ int     exec_ls_red(t_red *red)
 			return (-1);
 		left_fd = red->left == NULL ? 0 : ft_atoi(red->left);
 		dup2(right_fd, left_fd);
+		if (left_fd == 1)
+			*fd = right_fd;
 	}
 	else
-		return (exec_on_ampersand(red));
+		return (exec_on_ampersand(red, fd));
 	return (0);
 }

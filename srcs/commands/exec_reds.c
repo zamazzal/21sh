@@ -57,14 +57,17 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 	t_red	*reds;
 	t_red	*curr;
 	t_afterred red;
-	char	*clean_cmd;
 	int		fd;
 
+	red.fd = -1;
+	red.cmd = cmd;
 	reds = extract_reds(cmd);
+	//ft_putendl("1");
 	if (reds == NULL)
-		return (cmd);
+		return (red);
 	clean_reds_wings(reds);
-	clean_cmd = get_clean_cmd(cmd, reds);
+	red.cmd = get_clean_cmd(cmd, reds);
+	//ft_putendl("2");
 	curr = reds;
 	while (curr)
 	{
@@ -75,12 +78,12 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 		}
 		else if (curr->type == RD)
 		{
-			if ((fd = exec_rd_red(curr)) == -1)
+			if ((fd = exec_rd_red(curr, &red.fd)) == -1)
 				*status = -1;
 		}
 		else if (curr->type == LS)
 		{
-			if ((fd = exec_ls_red(curr)) == -1)
+			if ((fd = exec_ls_red(curr, &red.fd)) == -1)
 				*status = -1;
 		}
 		if (fd != -1)
@@ -92,11 +95,11 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 
 		curr = curr->next;
 	}
+	//ft_putendl("3");
 	if (*status != -1)
 	{
-		red.cmd = clean_cmd;
 		return (red);
 	}
-	free(clean_cmd);
-	return (NULL);
+	ft_strdel(&red.cmd);
+	return (red);
 }

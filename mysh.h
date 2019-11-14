@@ -119,7 +119,7 @@ typedef struct	s_red
 
 typedef	struct	s_afterred
 {
-	int 	d;
+	int 	fd;
 	char	*cmd;
 }				t_afterred;
 
@@ -299,14 +299,14 @@ void	print_red(t_red *red);
 int     **get_reds_positions(char *cmd);
 char    *get_clean_cmd(char *cmd, t_red *reds);
 void	clean_reds_wings(t_red *reds);
-char	*exec_reds(char *cmd, int *status, int **fd_buf);
+t_afterred exec_reds(char *cmd, int *status, int **fd_buf);
 int		valid_right_chars(char *right);
 int     valid_left_chars(char *left, int type);
-int		exec_rs_red(t_red *red);
-int		exec_rd_red(t_red *red);
-int		exec_ls_red(t_red *red);
+int		exec_rs_red(t_red *red, int *fd);
+int		exec_rd_red(t_red *red, int *fd);
+int		exec_ls_red(t_red *red, int *fd);
 int		test_fd(int fd);
-int		redirect_ltor(int left_fd, char *buf, int close_right);
+int		redirect_ltor(int left_fd, char *buf, int close_right, int *fd);
 int		open_file(char *path, int oflag);
 int		ambiguous_red(t_red *red);
 char	*ms_expand_arg(char *arg);
