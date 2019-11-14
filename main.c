@@ -151,7 +151,7 @@ static int		ft_putcmd(char *cmd)
 	int f[3];
 	int p[2];
 	t_info	info;
-	char	*cln_cmd;
+	t_afterred	red;
 	int		status;
 	int		*fd_buf;
 
@@ -170,7 +170,7 @@ static int		ft_putcmd(char *cmd)
 		append_fd_buf(&fd_buf, -1);
 		status = 0;
 		///////////////// * Redirections * /////////////////
-		if ((cln_cmd = exec_reds(cmds[i], &status, &fd_buf)) == NULL)
+		if ((red = exec_reds(cmds[i], &status, &fd_buf)) == NULL)
 		{
 			if (status == -1 && !(status = 0))
 			{
@@ -190,7 +190,7 @@ static int		ft_putcmd(char *cmd)
 	//	else
 	//		dup2(f[1], 1);
 		///////////////// * PARSE & PUTCMD * /////////////////
-		if (putcmd(cln_cmd, cmds, info))
+		if (putcmd(red.cmd, cmds, info))
 			return (1);
 		close_fd_buf(&fd_buf);
 		i++;

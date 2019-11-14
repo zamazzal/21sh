@@ -113,7 +113,7 @@ static int	exec_on_ampersand(t_red *red)
 	return (right_fd);
 }
 
-int     exec_rs_red(t_red *red)
+int     exec_rs_red(t_red *red, int *fd)
 {
 	int     right_fd;
 	int		left_fd;
@@ -130,6 +130,7 @@ int     exec_rs_red(t_red *red)
 		if (red->left && red->left[0] == '&')
 		{
 			dup2(right_fd, 1);
+			*fd = right_fd;
 			dup2(right_fd, 2);
 		}
 		else
@@ -138,6 +139,8 @@ int     exec_rs_red(t_red *red)
 	/*		if (test_fd(left_fd) == -1)
 				return (-1);
 	*/		dup2(right_fd, left_fd);
+			if (left_fd == 1)
+				*fd = right_fd;
 		}
 	}
 	else

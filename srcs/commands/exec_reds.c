@@ -52,10 +52,11 @@ void	append_fd_buf(int **fd_buf, int fd)
 	(*fd_buf) = new_buf;
 }
 
-char	*exec_reds(char *cmd, int *status, int **fd_buf)
+t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 {
 	t_red	*reds;
 	t_red	*curr;
+	t_afterred red;
 	char	*clean_cmd;
 	int		fd;
 
@@ -69,17 +70,17 @@ char	*exec_reds(char *cmd, int *status, int **fd_buf)
 	{
 		if (curr->type == RS)
 		{
-			if ((fd = exec_rs_red(curr)) == -1)
+			if ((fd = exec_rs_red(curr, &red.fd)) == -1)
 				*status = -1;
 		}
 		else if (curr->type == RD)
 		{
-			if ((fd = exec_rd_red(curr)) == -1)
+			if ((fd = exec_rd_red(curr, &red.fd)) == -1)
 				*status = -1;
 		}
 		else if (curr->type == LS)
 		{
-			if ((fd = exec_ls_red(curr)) == -1)
+			if ((fd = exec_ls_red(curr, &red.fd)) == -1)
 				*status = -1;
 		}
 		if (fd != -1)
@@ -92,7 +93,10 @@ char	*exec_reds(char *cmd, int *status, int **fd_buf)
 		curr = curr->next;
 	}
 	if (*status != -1)
-		return (clean_cmd);
+	{
+		red.cmd = clean_cmd;
+		return (red);
+	}
 	free(clean_cmd);
 	return (NULL);
 }

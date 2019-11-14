@@ -117,6 +117,12 @@ typedef struct	s_red
 	struct s_red	*next;
 }				t_red;
 
+typedef	struct	s_afterred
+{
+	int fd;
+	char *cmd;
+}				t_afterred;
+
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
 char			**g_environ;
