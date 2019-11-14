@@ -13,5 +13,5 @@ int     exec_rd_red(t_red *red, int *fd)
 	dup2(right_fd, left_fd);
 	if (left_fd == 1)
 		*fd = right_fd;
-	return (0);
+	return (right_fd);
 }
