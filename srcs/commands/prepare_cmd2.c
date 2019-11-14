@@ -49,7 +49,7 @@ static int	ms_expand_dollar(char **buffer, char *arg)
 		ft_strappend(&var_name, arg[i], TRUE);
 		i++;
 	}
-	if ((val = getenv(var_name)))
+	if ((val = ft_getenv(var_name)))
 		ft_strojoin(buffer, val, TRUE);
 	ft_strdel(&var_name);
 	return (i);
