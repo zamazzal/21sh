@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 19:48:06 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/12 20:23:48 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/14 17:13:30 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ typedef struct	s_red
 
 typedef	struct	s_afterred
 {
-	int fd;
-	char *cmd;
+	int 	d;
+	char	*cmd;
 }				t_afterred;
 
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"

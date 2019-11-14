@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 17:57:17 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/12 20:43:24 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/14 17:22:23 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		ambiguous_red(t_red *red)
 	return (-1);
 }
 
-int		redirect_ltor(int left_fd, char *buf, int close_right)
+int		redirect_ltor(int left_fd, char *buf, int close_right, int *fd)
 {
 	int		right_fd;
 
@@ -64,13 +64,15 @@ int		redirect_ltor(int left_fd, char *buf, int close_right)
 		if (test_fd(right_fd = ft_atoi(buf)) == -1)
 			return (-1);
 		dup2(right_fd, left_fd);
+		if (left_fd == 1)
+			*fd = right_fd;
 		if (close_right)
 			close(right_fd);
 	}
 	return (right_fd);
 }
 
-int		redirect_to_file(t_red *red, int left_fd, char *buf)
+int		redirect_to_file(t_red *red, int left_fd, char *buf, int *fd)
 {
 	int		right_fd;
 
@@ -80,11 +82,12 @@ int		redirect_to_file(t_red *red, int left_fd, char *buf)
 	if (left_fd != 1)
 		return (ambiguous_red(red));
 	dup2(right_fd, 1);
+	*fd = right_fd;
 	dup2(right_fd, 2);
 	return (right_fd);
 }
 
-static int	exec_on_ampersand(t_red *red)
+static int	exec_on_ampersand(t_red *red, int *fd)
 {
 	int		right_fd;
 	int		left_fd;
@@ -96,19 +99,19 @@ static int	exec_on_ampersand(t_red *red)
 		red->right++;
 	len = ft_strlen(red->right);
 	left_fd = red->left == NULL ? 1 : ft_atoi(red->left);
-	if ((right_fd = redirect_ltor(left_fd, red->right, 0)) == -1)
+	if ((right_fd = redirect_ltor(left_fd, red->right, 0, fd)) == -1)
 		return (-1);
 	else if (red->right[0] == '-')
 		close(left_fd);
 	else if (red->right[len - 1] == '-')
 	{
 		buf = ft_strsub(red->right, 0, len);
-		if ((right_fd = redirect_ltor(left_fd, buf, 1)) == -1)
+		if ((right_fd = redirect_ltor(left_fd, buf, 1, fd)) == -1)
 			return (-1);
 		else
 			return (ambiguous_red(red));
 	}
-	else if ((right_fd = redirect_to_file(red, left_fd, red->right)) == -1)
+	else if ((right_fd = redirect_to_file(red, left_fd, red->right, fd)) == -1)
 		return (-1);
 	return (right_fd);
 }
@@ -144,6 +147,6 @@ int     exec_rs_red(t_red *red, int *fd)
 		}
 	}
 	else
-		return (exec_on_ampersand(red));
+		return (exec_on_ampersand(red, fd));
 	return (right_fd);
 }
