@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 13:48:31 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/27 21:38:33 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:56:47 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,7 +422,10 @@ void		ft_shell(void)
 		g_input_type = PROMPT;
 		ft_term_prepare(0);
 		if (!(input = ft_strdup(readline(history))) || parseerror(input, 1))
+		{
+			ft_strdel(&g_input);
 			continue ;
+		}
 		ft_strdel(&g_input);
 		if (!(input = makecmdclear(input, history)))
 			continue ;
