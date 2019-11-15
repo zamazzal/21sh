@@ -22,8 +22,11 @@ void	close_fd_buf(int **fd_buf)
 		close((*fd_buf)[i]);
 		i++;
 	}
-	free(*fd_buf);
-	*fd_buf = NULL;
+	if (*fd_buf)
+	{
+		free(*fd_buf);
+		*fd_buf = NULL;
+	}
 }
 
 void	append_fd_buf(int **fd_buf, int fd)
@@ -67,6 +70,8 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 		return (red);
 	clean_reds_wings(reds);
 	red.cmd = get_clean_cmd(cmd, reds);
+	if (!red.cmd)
+		red.cmd = ft_strdup("cat");
 	//ft_putendl("2");
 	curr = reds;
 	while (curr)

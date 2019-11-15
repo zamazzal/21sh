@@ -185,7 +185,7 @@ static int		ft_putcmd(char *cmd)
 		//ft_putendl("xxxxx1xxxxxxx");
 		///////////////// * Redirections * /////////////////
 		red = exec_reds(cmds[i], &status, &fd_buf);
-		if (red.cmd == NULL)
+		if (!red.cmd)
 		{
 			if (status == -1 && !(status = 0))
 			{
