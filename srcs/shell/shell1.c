@@ -139,6 +139,8 @@ int			ft_promptlen(void)
 		return (BSPROMPT);
 	if (g_input_type == PIPE)
 		return (PIPEPROMPT);
+	if (g_input_type == HERDOC)
+		return (HERDOCPROMPT);
 	return (0);
 }
 
@@ -433,7 +435,7 @@ void		ft_shell(void)
 		history = ft_addtotab(history, input);
 		if (!((cmds = createcmds(input))))
 			continue ;
-		if (ft_putcmds(cmds))
+		if (ft_putcmds(cmds, history))
 			break ;
 		ft_endinput(cmds, input);
 	}

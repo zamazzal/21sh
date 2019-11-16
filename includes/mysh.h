@@ -161,6 +161,7 @@ t_cpy			g_cpy;
 # define BQ 96
 # define BS 92
 # define PIPE 124
+# define HERDOC 42
 
 #define LS 0
 #define LD 1
@@ -175,6 +176,7 @@ t_cpy			g_cpy;
 # define QPROMPT 7
 # define BQPROMPT 8
 # define PIPEPROMPT 6
+# define HERDOCPROMPT 9
 
 /*
 **		shell
@@ -187,7 +189,7 @@ char			**createcmds(char *input);
 void			ft_shell(void);
 char			*readline(char **history);
 char			*readline2(char **history);
-int				ft_putcmds(char **cmd);
+int				ft_putcmds(char **cmd, char **history);
 t_cursor		ft_checknoprint(int key, t_cursor cursor, char **history, int *i);
 
 /*
@@ -392,4 +394,7 @@ void	ms_set_quote(int *quoted, char *quote, char c);
 t_red	*extract_reds(char *cmd);
 void	append_fd_buf(int **fd_buf, int fd);
 void	close_fd_buf(int **fd_buf);
+
+char	*ms_expand_quotes(char *arg);
+char	*ms_get_arg(char *line);
 #endif

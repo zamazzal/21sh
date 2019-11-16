@@ -50,7 +50,7 @@ static char	**ms_expand_args(char **args)
 	return (buffer);
 }
 
-static char	*ms_get_arg(char *line)
+char	*ms_get_arg(char *line)
 {
 	int		i;
 	char	*arg;

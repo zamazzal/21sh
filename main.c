@@ -224,7 +224,68 @@ int		ft_putcmd(char *cmd)
 	return (0);
 }
 
-t_semiherdoc *ft_semiherdoc(char *cmd)
+char *get_herdoc_right(char *str)
+{
+	char *new;
+	int i;
+
+	i = 0;
+	while (str[i] != '\0' && (str[i] == 32 || str[i] == '\t'))
+		i++;
+	new = ms_get_arg(&str[i]);
+	new = ms_expand_quotes(new);
+	return (new);
+}
+
+char **putherdoc(char *str, char **history)
+{
+	char **herdoc;
+	int i;
+
+	herdoc = (char **)malloc(sizeof(char *));
+	herdoc[0] = NULL;
+	i = 0;
+	ft_term_prepare(0);
+	while (1337)
+	{
+		g_cursor = ft_defaultcursor(&g_cursor);
+		ft_putterm("cr");
+		ft_putstr("heredoc> ");
+		g_input_type = HERDOC;
+		g_input = readline4(history, &i);
+		if (i == 1 || ft_strequ(g_input, str))
+			break;
+		herdoc = ft_addtotab(herdoc, g_input);
+		ft_strdel(&g_input);
+	}
+	ft_term_prepare(1);
+	if (i == 1)
+		return (NULL);
+	ft_strdel(&g_input);
+	return (herdoc);
+}
+
+char **ft_getherd_content(char *cmd, char **history)
+{
+	char **herdoc;
+	char *ptr;
+	char *str;
+
+	herdoc = NULL;
+	ptr = cmd;
+	while ((ptr = ft_strstr(ptr, "<<")))
+	{
+		ptr = ptr + 2;
+		str = get_herdoc_right(ptr);
+		if (herdoc)
+			ft_freetable(&herdoc);
+		herdoc = putherdoc(str, history);
+	}
+	return (herdoc);
+}
+
+
+t_semiherdoc *ft_semiherdoc(char *cmd, char **history)
 {
 	int i;
 	t_semiherdoc *sherdoc;
@@ -239,7 +300,7 @@ t_semiherdoc *ft_semiherdoc(char *cmd)
 	head = sherdoc;
 	while (sub[i] != NULL)
 	{
-		sherdoc->content = sub;
+		sherdoc->content = ft_getherd_content(sub[i], history);
 		if (sub[i + 1] != NULL)
 		{
 			sherdoc->next = (t_semiherdoc*)malloc(sizeof(t_semiherdoc));
@@ -251,7 +312,7 @@ t_semiherdoc *ft_semiherdoc(char *cmd)
 	return (head);
 }
 
-t_herdoc *ft_herdoc(char **cmds)
+t_herdoc *ft_herdoc(char **cmds, char **history)
 {
 	t_herdoc *herdoc;
 	t_herdoc *head;
@@ -265,7 +326,7 @@ t_herdoc *ft_herdoc(char **cmds)
 	head = herdoc;
 	while (cmds[i] != NULL)
 	{
-		herdoc->semiherdoc = ft_semiherdoc(cmds[i]);
+		herdoc->semiherdoc = ft_semiherdoc(cmds[i], history);
 		if (cmds[i + 1] != NULL)
 		{
 			herdoc->next = (t_herdoc*)malloc(sizeof(t_herdoc));
@@ -286,21 +347,23 @@ void		ft_putherdocs(t_herdoc *herdoc)
 		tmp = herdoc->semiherdoc;
 		while (tmp)
 		{
+			ft_putendl("\n=============");
 			ft_puttables(tmp->content);
+			ft_putendl("=============");
 			tmp = tmp->next;
 		}		
 		herdoc = herdoc->next;
 	}
 }
 
-int			ft_putcmds(char **cmd)
+int			ft_putcmds(char **cmd, char **history)
 {
 	int i;
 	t_herdoc *herdoc;
 
 	i = 0;
-	herdoc = ft_herdoc(cmd);
-	ft_putherdocs(herdoc);
+	herdoc = ft_herdoc(cmd, history);
+	//ft_putherdocs(herdoc);
 	while (cmd[i] != NULL)
 	{
 		if (ft_putcmd(cmd[i]))

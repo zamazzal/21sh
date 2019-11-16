@@ -12,7 +12,7 @@
 
 #include "mysh.h"
 
-static char	*ms_expand_quotes(char *arg)
+char	*ms_expand_quotes(char *arg)
 {
 	int		i;
 	int		quoted;
