@@ -90,6 +90,22 @@
 **		Variables
 */
 
+//////////////////////////////////
+
+typedef struct	s_semiherdoc
+{
+	char **content;
+	struct s_semiherdoc *next;
+}				t_semiherdoc;
+
+typedef struct	s_herdoc
+{
+	t_semiherdoc	*semiherdoc;
+	struct s_herdoc *next;
+}				t_herdoc;
+
+//////////////////////////////////
+
 typedef struct	s_info
 {
 	int			fd;

@@ -19,6 +19,11 @@ int     exec_rd_red(t_red *red, int *fd)
 
 	while (red->right[0] == ' ')
 		red->right++;
+	if (red->right[0] == '&')
+	{
+		ft_puterror("syntax error near unexpected token `&'");
+		return (-1);
+	}
 	if ((right_fd = open_file(red->right, O_WRONLY|O_APPEND|O_CREAT)) == -1)
 		return (-1);
 	left_fd = red->left == NULL ? 1 : ft_atoi(red->left);

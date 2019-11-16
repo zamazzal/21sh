@@ -55,6 +55,15 @@ void	append_fd_buf(int **fd_buf, int fd)
 	(*fd_buf) = new_buf;
 }
 
+char		*ft_nocmd(int type)
+{
+	if (type == RS || type == RD || type == LD)
+		return (ft_strdup("cat"));
+	if (type == LS)
+		return (ft_strdup("more"));
+	return (ft_strdup("cat"));
+}
+
 t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 {
 	t_red	*reds;
@@ -70,10 +79,9 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 		return (red);
 	clean_reds_wings(reds);
 	red.cmd = get_clean_cmd(cmd, reds);
-	if (!red.cmd)
-		red.cmd = ft_strdup("cat");
-	//ft_putendl("2");
 	curr = reds;
+	red.cmd = (!red.cmd) ? ft_nocmd(curr->type) : red.cmd;
+	//ft_putendl("2");
 	while (curr)
 	{
 		if (curr->type == RS)
@@ -92,19 +100,14 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 				*status = -1;
 		}
 		if (fd != -1)
-		{
 			append_fd_buf(fd_buf, fd);
-		}
 		if (*status == -1)
 			break ;
-
 		curr = curr->next;
 	}
 	//ft_putendl("3");
 	if (*status != -1)
-	{
 		return (red);
-	}
 	ft_strdel(&red.cmd);
 	return (red);
 }
