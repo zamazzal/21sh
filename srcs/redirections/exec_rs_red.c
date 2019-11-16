@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 17:57:17 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/14 17:22:23 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/16 16:03:45 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ int		redirect_ltor(int left_fd, char *buf, int close_right, int *fd)
 {
 	int		right_fd;
 
-	right_fd = -1;
+	right_fd = -2;
+	
 	if (ft_strisnum(buf))
 	{
 		if (test_fd(right_fd = ft_atoi(buf)) == -1)
@@ -68,6 +69,7 @@ int		redirect_ltor(int left_fd, char *buf, int close_right, int *fd)
 			*fd = right_fd;
 		if (close_right)
 			close(right_fd);
+		return (-3);
 	}
 	return (right_fd);
 }
@@ -97,16 +99,20 @@ static int	exec_on_ampersand(t_red *red, int *fd)
 	red->right++;
 	while (red->right[0] == ' ')
 		red->right++;
-	len = ft_strlen(red->right);
+	len = ft_strlen(red->right);	
 	left_fd = red->left == NULL ? 1 : ft_atoi(red->left);
-	if ((right_fd = redirect_ltor(left_fd, red->right, 0, fd)) == -1)
+	right_fd = redirect_ltor(left_fd, red->right, 0, fd);
+	if (right_fd == -1)
 		return (-1);
+	else if (right_fd == -3)
+		return (0);
 	else if (red->right[0] == '-')
 		close(left_fd);
 	else if (red->right[len - 1] == '-')
 	{
-		buf = ft_strsub(red->right, 0, len);
-		if ((right_fd = redirect_ltor(left_fd, buf, 1, fd)) == -1)
+		buf = ft_strsub(red->right, 0, len-1);
+		right_fd = redirect_ltor(left_fd, buf, 1, fd);
+		if (right_fd == -2 || right_fd == -1)
 			return (-1);
 		else
 			return (ambiguous_red(red));
@@ -147,6 +153,6 @@ int     exec_rs_red(t_red *red, int *fd)
 		}
 	}
 	else
-		return (exec_on_ampersand(red, fd));
+		right_fd = exec_on_ampersand(red, fd);
 	return (right_fd);
 }
