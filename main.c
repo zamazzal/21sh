@@ -156,7 +156,26 @@ void			ft_endcmds(char **cmds, int fd)
 	ft_freetable(&cmds);
 }
 
-int		ft_putcmd(char *cmd)
+void	ft_herdocexec(char **heredoc)
+{
+	int p[2];
+	int i;
+
+	i = 0;
+	if (!heredoc)
+		return ;
+	pipe(p);
+	dup2(p[0], 0);
+	close(p[0]);
+	while (heredoc[i] != NULL)
+	{
+		ft_putendl_fd(heredoc[i], p[1]);
+		i++;
+	}
+	close(p[1]);
+}
+
+int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 {
 	char **cmds;
 	int i;
@@ -183,6 +202,10 @@ int		ft_putcmd(char *cmd)
 		append_fd_buf(&fd_buf, -1);
 		status = 0;
 		//ft_putendl("xxxxx1xxxxxxx");
+		///////////////// * Heredoc * /////////////////
+		
+		ft_herdocexec(semiherdoc->content);
+		
 		///////////////// * Redirections * /////////////////
 		red = exec_reds(cmds[i], &status, &fd_buf);
 		if (!red.cmd)
@@ -217,6 +240,7 @@ int		ft_putcmd(char *cmd)
 		//ft_putendl("xxxxxx4xxxxxxx");
 		close_fd_buf(&fd_buf);
 		i++;
+		semiherdoc = semiherdoc->next;
 	}
 	dup2(f[1], 1);
 	dup2(f[2], 2);
@@ -237,7 +261,7 @@ char *get_herdoc_right(char *str)
 	return (new);
 }
 
-char **putherdoc(char *str, char **history)
+char **putherdoc(char *str, char **history, int *status)
 {
 	char **herdoc;
 	int i;
@@ -260,12 +284,15 @@ char **putherdoc(char *str, char **history)
 	}
 	ft_term_prepare(1);
 	if (i == 1)
+	{
+		*status = 1;
 		return (NULL);
+	}
 	ft_strdel(&g_input);
 	return (herdoc);
 }
 
-char **ft_getherd_content(char *cmd, char **history)
+char **ft_getherd_content(char *cmd, char **history, int *status)
 {
 	char **herdoc;
 	char *ptr;
@@ -279,13 +306,15 @@ char **ft_getherd_content(char *cmd, char **history)
 		str = get_herdoc_right(ptr);
 		if (herdoc)
 			ft_freetable(&herdoc);
-		herdoc = putherdoc(str, history);
+		herdoc = putherdoc(str, history, status);
+		if (*status)
+			break;
 	}
 	return (herdoc);
 }
 
 
-t_semiherdoc *ft_semiherdoc(char *cmd, char **history)
+t_semiherdoc *ft_semiherdoc(char *cmd, char **history, int *status)
 {
 	int i;
 	t_semiherdoc *sherdoc;
@@ -300,7 +329,9 @@ t_semiherdoc *ft_semiherdoc(char *cmd, char **history)
 	head = sherdoc;
 	while (sub[i] != NULL)
 	{
-		sherdoc->content = ft_getherd_content(sub[i], history);
+		sherdoc->content = ft_getherd_content(sub[i], history, status);
+		if (*status)
+			break;
 		if (sub[i + 1] != NULL)
 		{
 			sherdoc->next = (t_semiherdoc*)malloc(sizeof(t_semiherdoc));
@@ -312,7 +343,7 @@ t_semiherdoc *ft_semiherdoc(char *cmd, char **history)
 	return (head);
 }
 
-t_herdoc *ft_herdoc(char **cmds, char **history)
+t_herdoc *ft_herdoc(char **cmds, char **history, int *status)
 {
 	t_herdoc *herdoc;
 	t_herdoc *head;
@@ -326,7 +357,9 @@ t_herdoc *ft_herdoc(char **cmds, char **history)
 	head = herdoc;
 	while (cmds[i] != NULL)
 	{
-		herdoc->semiherdoc = ft_semiherdoc(cmds[i], history);
+		herdoc->semiherdoc = ft_semiherdoc(cmds[i], history, status);
+		if (*status)
+			break;
 		if (cmds[i + 1] != NULL)
 		{
 			herdoc->next = (t_herdoc*)malloc(sizeof(t_herdoc));
@@ -351,7 +384,7 @@ void		ft_putherdocs(t_herdoc *herdoc)
 			ft_puttables(tmp->content);
 			ft_putendl("=============");
 			tmp = tmp->next;
-		}		
+		}
 		herdoc = herdoc->next;
 	}
 }
@@ -360,15 +393,22 @@ int			ft_putcmds(char **cmd, char **history)
 {
 	int i;
 	t_herdoc *herdoc;
+	t_herdoc *head;
+	int status;
 
 	i = 0;
-	herdoc = ft_herdoc(cmd, history);
+	status = 0;
+	herdoc = ft_herdoc(cmd, history, &status);
+	if (status) // free list
+		return (0);
+	head = herdoc;
 	//ft_putherdocs(herdoc);
 	while (cmd[i] != NULL)
 	{
-		if (ft_putcmd(cmd[i]))
+		if (ft_putcmd(cmd[i], head->semiherdoc))
 			return (1);
 		i++;
+		head = head->next;
 	}
 	return (0);
 }
