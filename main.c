@@ -256,6 +256,8 @@ char *get_herdoc_right(char *str)
 	i = 0;
 	while (str[i] != '\0' && (str[i] == 32 || str[i] == '\t'))
 		i++;
+	if (str[i] != '\0' && str[i] == '-')
+		i++;
 	new = ms_get_arg(&str[i]);
 	new = ms_expand_quotes(new);
 	return (new);
