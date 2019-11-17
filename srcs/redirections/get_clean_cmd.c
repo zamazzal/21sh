@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 18:35:13 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/11 17:06:38 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/17 14:34:38 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*get_clean_cmd(char *cmd, t_red *reds)
 			i++;
 		}
 		i = ((red->type == LS || red->type == RS) ? i + 1 : i + 2) + n;
-		i += ft_strlen(red->right);
+		i += ft_strlen(red->o_right);
 		red = red->next;
 	}
 	while (cmd[i])

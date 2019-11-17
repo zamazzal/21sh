@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 14:01:43 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/14 17:23:08 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/17 14:30:03 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 	red.fd = -1;
 	red.cmd = cmd;
 	reds = extract_reds(cmd);
-	//ft_putendl("1");
 	if (reds == NULL)
 		return (red);
 	clean_reds_wings(reds);
