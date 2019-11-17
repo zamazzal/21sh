@@ -22,7 +22,10 @@ void clean_left(char **left, int type)
 	if (*left)
 		free(*left);
 	if (ft_strlen(tmp) == 0)
+	{
+		free(tmp);
 		*left = NULL;
+	}
 	else
 		*left = tmp;
 }

@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 14:01:43 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/17 14:30:03 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/17 18:55:59 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,24 @@ char		*ft_nocmd(int type)
 	return (ft_strdup("cat"));
 }
 
+void	free_reds(t_red **reds)
+{
+	t_red	*curr;
+	t_red	*next;
+
+	curr = *reds;
+	while (curr)
+	{
+		next = curr->next;
+		free(curr->left);
+		free(curr->right);
+		free(curr->o_left);
+		free(curr->o_right);
+		free(curr);
+		curr = next;
+	}
+}
+
 t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 {
 	t_red	*reds;
@@ -80,7 +98,9 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 	red.cmd = get_clean_cmd(cmd, reds);
 	curr = reds;
 	red.cmd = (!red.cmd) ? ft_nocmd(curr->type) : red.cmd;
-	//ft_putendl("2");
+	ft_putstr("->");
+	ft_putnbr(reds->pos);
+	ft_putstr("\n");
 	while (curr)
 	{
 		if (curr->type == RS)
@@ -104,7 +124,7 @@ t_afterred	exec_reds(char *cmd, int *status, int **fd_buf)
 			break ;
 		curr = curr->next;
 	}
-	//ft_putendl("3");
+	free_reds(&reds);
 	if (*status != -1)
 		return (red);
 	ft_strdel(&red.cmd);

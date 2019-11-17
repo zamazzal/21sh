@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 17:57:17 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/16 16:03:45 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/17 18:54:57 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,49 +91,53 @@ int		redirect_to_file(t_red *red, int left_fd, char *buf, int *fd)
 
 static int	exec_on_ampersand(t_red *red, int *fd)
 {
+	char	*right_buf;
 	int		right_fd;
 	int		left_fd;
 	char	*buf;
 	int		len;
 
-	red->right++;
-	while (red->right[0] == ' ')
-		red->right++;
-	len = ft_strlen(red->right);	
+	right_buf = red->right;
+	right_buf++;
+	while (right_buf[0] == ' ')
+		right_buf++;
+	len = ft_strlen(right_buf);	
 	left_fd = red->left == NULL ? 1 : ft_atoi(red->left);
-	right_fd = redirect_ltor(left_fd, red->right, 0, fd);
+	right_fd = redirect_ltor(left_fd, right_buf, 0, fd);
 	if (right_fd == -1)
 		return (-1);
 	else if (right_fd == -3)
 		return (0);
-	else if (red->right[0] == '-')
+	else if (right_buf[0] == '-')
 		close(left_fd);
-	else if (red->right[len - 1] == '-')
+	else if (right_buf[len - 1] == '-')
 	{
-		buf = ft_strsub(red->right, 0, len-1);
+		buf = ft_strsub(right_buf, 0, len-1);
 		right_fd = redirect_ltor(left_fd, buf, 1, fd);
 		if (right_fd == -2 || right_fd == -1)
 			return (-1);
 		else
 			return (ambiguous_red(red));
 	}
-	else if ((right_fd = redirect_to_file(red, left_fd, red->right, fd)) == -1)
+	else if ((right_fd = redirect_to_file(red, left_fd, right_buf, fd)) == -1)
 		return (-1);
 	return (right_fd);
 }
 
 int     exec_rs_red(t_red *red, int *fd)
 {
+	char	*right_buf;
 	int     right_fd;
 	int		left_fd;
 	int		i;
 
-	if (red->right[0] != '&')
+	right_buf = red->right;
+	if (right_buf[0] != '&')
 	{
 		i = 0;
-		while (red->right[i] == ' ')
+		while (right_buf[i] == ' ')
 			i++;
-		red->right = red->right + i;
+		right_buf = right_buf + i;
 		if ((right_fd = open_file(red->right, O_WRONLY|O_TRUNC|O_CREAT)) == -1)
 			return (-1);
 		if (red->left && red->left[0] == '&')
