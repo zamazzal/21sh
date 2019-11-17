@@ -26,6 +26,8 @@ int				ft_checkkey(int i)
 		return (i);
 	if (i == ALTG || i == ALTA)
 		return (i);
+	if (i == TAP)
+		return (i);
 	return (0);
 }
 

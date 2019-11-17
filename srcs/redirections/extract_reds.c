@@ -6,29 +6,48 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 15:01:23 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/11 16:48:04 by aihya            ###   ########.fr       */
+/*   Updated: 2019/11/17 17:33:27 by aihya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mysh.h"
 
-t_red *red_node(int type, char **wings)
+
+t_red *red_node(t_pos_tab *pos_tab_node, char **wings)
 {
 	t_red *node;
 
 	node = (t_red *)malloc(sizeof(t_red));
-	node->type = type;
+	node->type = pos_tab_node->type;
 	node->right = ft_strdup(wings[0]);
 	node->left = ft_strdup(wings[1]);
 	node->next = NULL;
 	return (node);
 }
 
-void set_pos_table(int ***pos_table, int index, int pos, int red_type)
+void set_pos_table(t_pos_tab **pos_tab, int pos, int red_type)
 {
-	(*pos_table)[index] = (int *)malloc(sizeof(int) * 2);
-	(*pos_table)[index][0] = pos;
-	(*pos_table)[index][1] = red_type;
+	int	i;
+	t_pos_tab	*curr;
+
+	i = 0;
+	curr = *pos_tab;
+	if (curr == NULL)
+	{
+		(*pos_tab) = (t_pos_tab *)malloc(sizeof(t_pos_tab));
+		(*pos_tab)->pos = pos;
+		(*pos_tab)->type = red_type;
+		(*pos_tab)->next = NULL;
+	}
+	else
+	{
+		while (curr->next != NULL)
+			curr = curr->next;
+		curr->next = (t_pos_tab *)malloc(sizeof(t_pos_tab));
+		curr->next->pos = pos;
+		curr->next->type = red_type;
+		curr->next->next = NULL;
+	}
 }
 
 void append_red_node(t_red **a_head, t_red *node)
@@ -46,7 +65,7 @@ void append_red_node(t_red **a_head, t_red *node)
 	}
 }
 
-int append_red_symbol(int ***pos_tab, int *c, char *cmd, int i)
+int append_red_symbol(t_pos_tab **pos_tab, char *cmd, int i)
 {
 	int k;
 	char sym;
@@ -54,20 +73,18 @@ int append_red_symbol(int ***pos_tab, int *c, char *cmd, int i)
 	sym = cmd[i];
 	k = count_red(cmd, i, 1);
 	if (k == 1)
-		set_pos_table(pos_tab, (*c)++, i, (sym == '>' ? RS : LS));
+		set_pos_table(pos_tab, i, (sym == '>' ? RS : LS));
 	else if (k == 2)
-		set_pos_table(pos_tab, (*c)++, i, (sym == '>' ? RD : LD));
+		set_pos_table(pos_tab, i, (sym == '>' ? RD : LD));
 	return (k);
 }
 
-int **get_reds_positions(char *cmd)
+t_pos_tab	*get_reds_positions(char *cmd)
 {
-	int i;
-	int c;
-	int **pos_tab;
+	int			i;
+	t_pos_tab	*pos_tab;
 
-	pos_tab = (int **)malloc(sizeof(int *) * POS_MAX_LEN);
-	c = 0;
+	pos_tab = NULL;
 	i = 0;
 	while (cmd[i])
 	{
@@ -78,14 +95,12 @@ int **get_reds_positions(char *cmd)
 		}
 		else if (ft_strchr("><", cmd[i]))
 		{
-			i += append_red_symbol(&pos_tab, &c, cmd, i);
+			i += append_red_symbol(&pos_tab, cmd, i);
 			continue;
 		}
 		i++;
 	}
-	if (c == 0)
-		return (NULL);
-	pos_tab[c] = NULL;
+
 	return (pos_tab);
 }
 
@@ -163,23 +178,38 @@ char *get_left(char *cmd, int pos)
 	return (left);
 }
 
-char **get_red_wings(char *cmd, int type, int pos)
+char **get_red_wings(char *cmd, t_pos_tab *node)
 {
 	char **wings;
 
 	wings = (char **)malloc(sizeof(char *) * 3);
-	if (type == LS || type == RS)
+	if (node->type == LS || node->type == RS)
 	{
-		wings[0] = get_right(cmd, pos, 1);
-		wings[1] = get_left(cmd, pos);
+		wings[0] = get_right(cmd, node->pos, 1);
+		wings[1] = get_left(cmd, node->pos);
 	}
-	else if (type == LD || type == RD)
+	else if (node->type == LD || node->type == RD)
 	{
-		wings[0] = get_right(cmd, pos, 2);
-		wings[1] = get_left(cmd, pos);
+		wings[0] = get_right(cmd, node->pos, 2);
+		wings[1] = get_left(cmd, node->pos);
 	}
 	wings[2] = NULL;
 	return (wings);
+}
+
+void	free_pos_tab(t_pos_tab **pos_tab)
+{
+	t_pos_tab	*curr;
+	t_pos_tab	*next;
+
+	curr = *pos_tab;
+	while (curr)
+	{
+		next = curr->next;
+		free(curr);
+		curr = next;
+	}
+	*pos_tab = NULL;
 }
 
 t_red *extract_reds(char *cmd)
@@ -187,68 +217,24 @@ t_red *extract_reds(char *cmd)
 	t_red *head;
 	t_red *node;
 	char **wings;
-	int i;
-	int	**reds_pos;
+	t_pos_tab *reds_pos;
+	t_pos_tab *curr;
 
 	head = NULL;
 	reds_pos = get_reds_positions(cmd);
-	i = 0;
 	if (reds_pos != NULL)
 	{
-		while (reds_pos[i] != NULL)
+		curr = reds_pos;
+		while (curr != NULL)
 		{
-			wings = get_red_wings(cmd, reds_pos[i][1], reds_pos[i][0]);
-			node = red_node(reds_pos[i][1], wings);
-			node->pos = reds_pos[i][0];
+			wings = get_red_wings(cmd, curr);
+			node = red_node(curr, wings);
+			node->pos = curr->pos;
 			append_red_node(&head, node);
 			ft_freetable(&wings);
-			i++;
+			curr = curr->next;
 		}
 	}
+	free_pos_tab(&reds_pos);
 	return (head);
 }
-
-/*
-int main(int argc, char **argv, char **envp)
-{
-	int **pos;
-	char str[] = "/bin/ls >ms";
-	t_red *reds;
-	t_red	*curr;
-	t_env *env;
-
-	(void)argc;
-	(void)argv;
-
-	//env = ms_init_env(envp);
-	//	ms_env(env);
-
-	pos = get_reds_positions(str);
-	reds = extract_reds(str, pos);
-		printf("Before:\n");
-	curr = reds;
-	while (curr)
-	{
-		printf("%d\n", curr->pos);
-		printf("[%s][%s]\n", curr->left, curr->right);
-		curr = curr->next;
-	}
-	printf("---------------\nAfter:\n");
-	clean_reds_wings(reds);
-	curr = reds;
-	while (curr)
-	{
-		printf("%d\n", curr->pos);
-		printf("[%s][%s]\n", curr->left, curr->right);
-		curr = curr->next;
-	}
-	char *cmd = get_clean_cmd(*str, reds);
-//	printf("-> %s\n", cmd);
-	if (exec_reds(reds) != -1)
-	{
-		char **tab = ft_strsplit_del(cmd, " ");
-		execve(tab[0], tab, envp);
-	}
-	return (0);
-}
-*/

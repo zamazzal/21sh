@@ -66,6 +66,7 @@
 # define ALTG 43458
 # define ALTA 42435
 # define CTRLD 4
+# define TAP 9
 
 /*
 **		Colors
@@ -144,6 +145,13 @@ typedef	struct	s_afterred
 	int 	fd;
 	char	*cmd;
 }				t_afterred;
+
+typedef struct	s_pos_tab
+{
+	int					pos;
+	int					type;
+	struct s_pos_tab	*next;
+}				t_pos_tab;
 
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
@@ -374,7 +382,7 @@ int				ft_getcurpos(void);
 int     quote_end(char *cmd, int start);
 int     count_red(char *cmd, int start, int same);
 void	print_red(t_red *red);
-int     **get_reds_positions(char *cmd);
+t_pos_tab	*get_reds_positions(char *cmd);
 char    *get_clean_cmd(char *cmd, t_red *reds);
 void	clean_reds_wings(t_red *reds);
 t_afterred exec_reds(char *cmd, int *status, int **fd_buf);
@@ -394,7 +402,6 @@ void	ms_set_quote(int *quoted, char *quote, char c);
 t_red	*extract_reds(char *cmd);
 void	append_fd_buf(int **fd_buf, int fd);
 void	close_fd_buf(int **fd_buf);
-
 char	*ms_expand_quotes(char *arg);
 char	*ms_get_arg(char *line);
 #endif

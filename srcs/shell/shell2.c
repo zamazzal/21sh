@@ -169,6 +169,30 @@ t_cursor		ft_altd(t_cursor cursor)
 	return (cursor);
 }
 
+t_cursor	ft_autocompletion(t_cursor cursor, char **history)
+{
+	static int i = 0;
+
+	if (!g_input)
+		return (cursor);
+	while (history[i])
+	{
+		if (ft_strnstr(history[i], g_input, ft_strlen(g_input)))
+		{
+			ft_strdel(&g_input);
+			g_input = ft_strdup(history[i]);
+			cursor = ft_defaultcursor(&cursor);
+			cursor = ft_curright(cursor, ft_strlen(g_input));
+			i++;
+			return (cursor);
+		}
+		i++;
+	}
+	if (!history[i])
+		i = 0;
+	return (cursor);
+}
+
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	if (key == ALTF)
@@ -203,6 +227,8 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		cursor = ft_altu(cursor);
 	if (key == ALTD)
 		cursor = ft_altd(cursor);
+	if (key == TAP)
+		cursor = ft_autocompletion(cursor, history);
 	return (cursor);
 }
 

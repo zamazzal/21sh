@@ -172,6 +172,7 @@ void	ft_herdocexec(char **heredoc)
 		ft_putendl_fd(heredoc[i], p[1]);
 		i++;
 	}
+	ft_freetable(&heredoc);
 	close(p[1]);
 }
 
@@ -185,6 +186,7 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	t_afterred	red;
 	int		status;
 	int		*fd_buf;
+	t_semiherdoc *tmp;
 
 	if (!(cmds = ft_cmdsplit(cmd, '|')))
 		return (1);
@@ -240,7 +242,9 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 		//ft_putendl("xxxxxx4xxxxxxx");
 		close_fd_buf(&fd_buf);
 		i++;
+		tmp = semiherdoc;
 		semiherdoc = semiherdoc->next;
+		free(tmp);
 	}
 	dup2(f[1], 1);
 	dup2(f[2], 2);
@@ -257,6 +261,8 @@ char *get_herdoc_right(char *str)
 	while (str[i] != '\0' && (str[i] == 32 || str[i] == '\t'))
 		i++;
 	if (str[i] != '\0' && str[i] == '-')
+		i++;
+	while (str[i] != '\0' && (str[i] == 32 || str[i] == '\t'))
 		i++;
 	new = ms_get_arg(&str[i]);
 	new = ms_expand_quotes(new);
@@ -410,7 +416,9 @@ int			ft_putcmds(char **cmd, char **history)
 		if (ft_putcmd(cmd[i], head->semiherdoc))
 			return (1);
 		i++;
+		herdoc = head;
 		head = head->next;
+		free(herdoc);
 	}
 	return (0);
 }
