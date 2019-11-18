@@ -186,7 +186,7 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	int p[2];
 	t_info	info;
 	t_afterred	red;
-	//int		status;
+	int		status;
 	int		*fd_buf;
 	t_semiherdoc *tmp;
 
@@ -203,7 +203,7 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	{
 		if (ft_herdocexec(semiherdoc->content))
 			return (1);
-		/*append_fd_buf(&fd_buf, -1);
+		append_fd_buf(&fd_buf, -1);
 		status = 0;
 
 		red = exec_reds(cmds[i], &status, &fd_buf);
@@ -211,10 +211,10 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 		{
 			if (status == -1 && !(status = 0))
 			{
-				//close_fd_buf(&fd_buf);
+				close_fd_buf(&fd_buf);
 				break ;
 			}
-		}*/
+		}
 		if (i > 0)
 			ft_inputdone(p[0]);
 		if (cmds[i + 1] != NULL)
@@ -232,7 +232,7 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 		}
 		if (putcmd(cmds[i], cmds, info))
 			return (1);
-		//close_fd_buf(&fd_buf);
+		close_fd_buf(&fd_buf);
 		i++;
 		tmp = semiherdoc;
 		semiherdoc = semiherdoc->next;
@@ -436,8 +436,15 @@ void			ft_cpy()
 	g_cpy.p1 = -1;
 	g_cpy.p2 = -1;
 }
+/*
+void	ft_test()
+{
+	char **paths;
 
+	if (!(paths = ft_strsplit(ft_getenv("PATH"), ':')))
+		return (NULL);
 
+}*/
 
 int				main(void)
 {

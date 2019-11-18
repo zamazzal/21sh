@@ -29,6 +29,8 @@ void			ft_do_bui(char **argv, char *cmd, int rtn)
 		ft_unsetenv(argv);
 	else if (rtn == CD)
 		ft_cd(argv);
+	else if (rtn == TYPE)
+		ft_type(argv[1]);
 }
 
 void			ft_do_cbui(char **argv, char *cmd, int rtn, t_info info)
@@ -56,6 +58,8 @@ void			ft_do_cbui(char **argv, char *cmd, int rtn, t_info info)
 			ft_unsetenv(argv);
 		else if (rtn == CD)
 			ft_cd(argv);
+		else if (rtn == TYPE)
+			ft_type(argv[1]);
 		exit(0);
 	}
 }

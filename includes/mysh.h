@@ -40,6 +40,7 @@
 # define UNSETENV 4
 # define ENV 5
 # define EXIT 6
+# define TYPE 7
 # define BUFFER_SIZE 8000
 # define HTABLE_SIZE 1000000
 
@@ -426,8 +427,9 @@ char	*ms_get_arg(char *line);
 
 void			ft_freeh_htab();
 
+void	ft_type(char *cmd);
 
-
-
+int		ft_isbuiltin(char *cmd);
+char		*ft_iscmd(char *cmd);
 unsigned long ft_hash(char *str);
 #endif

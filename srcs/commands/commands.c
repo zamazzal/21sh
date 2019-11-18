@@ -12,7 +12,7 @@
 
 #include "mysh.h"
 
-static int		ft_isbuiltin(char *cmd)
+int		ft_isbuiltin(char *cmd)
 {
 	if (ft_strequ(cmd, "echo"))
 		return (XECHO);
@@ -26,6 +26,8 @@ static int		ft_isbuiltin(char *cmd)
 		return (ENV);
 	else if (ft_strequ(cmd, "exit"))
 		return (EXIT);
+	else if (ft_strequ(cmd, "type"))
+		return (TYPE);
 	return (0);
 }
 
@@ -97,7 +99,7 @@ char			*ft_getcmd_from_htab(char *cmd)
 	return (NULL);
 }
 
-static char		*ft_iscmd(char *cmd)
+char		*ft_iscmd(char *cmd)
 {
 	char *path;
 	char **paths;
