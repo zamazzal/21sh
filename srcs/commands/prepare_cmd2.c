@@ -6,13 +6,13 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 16:19:25 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/06 16:25:29 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:36:48 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mysh.h"
 
-char	*ms_expand_quotes(char *arg)
+char		*ms_expand_quotes(char *arg)
 {
 	int		i;
 	int		quoted;

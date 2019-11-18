@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/04 19:26:11 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/06 16:24:29 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:19:13 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,4 @@ void	ft_putintab(char ***a_chain, char *entry)
 	new[i] = NULL;
 	ft_freetable(a_chain);
 	*a_chain = new;
-}
-
-int		ft_putchr(int c)
-{
-	return (write(2, &c, 1));
 }

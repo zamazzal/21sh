@@ -6,13 +6,13 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/05 19:54:12 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/05 21:17:15 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:37:24 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mysh.h"
 
-int		count_red(char *cmd, int start, int same)
+int				count_red(char *cmd, int start, int same)
 {
 	int		i;
 	int		c;

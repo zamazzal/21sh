@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 21:44:34 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/08 21:44:44 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:58:04 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int		ft_ctrld2(int pos)
 		return (0);
 	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
 	if (*g_input == '\0')
-            ft_strdel(&g_input);
+		ft_strdel(&g_input);
 	return (0);
 }
 
@@ -31,11 +31,11 @@ static int		ft_ctrld(int pos)
 	}
 	ft_strcpy(&g_input[pos], &g_input[pos + 1]);
 	if (*g_input == '\0')
-        ft_strdel(&g_input);
+		ft_strdel(&g_input);
 	return (0);
 }
 
-int			doctrld(int key, int mode)
+int				doctrld(int key, int mode)
 {
 	if (key == CTRLD)
 	{

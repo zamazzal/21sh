@@ -156,15 +156,16 @@ void			ft_endcmds(char **cmds, int fd)
 	ft_freetable(&cmds);
 }
 
-void	ft_herdocexec(char **heredoc)
+int	ft_herdocexec(char **heredoc)
 {
 	int p[2];
 	int i;
 
 	i = 0;
 	if (!heredoc)
-		return ;
-	pipe(p);
+		return (0);
+	if (pipe(p) == -1)
+		return (1);
 	dup2(p[0], 0);
 	close(p[0]);
 	while (heredoc[i] != NULL)
@@ -174,6 +175,7 @@ void	ft_herdocexec(char **heredoc)
 	}
 	ft_freetable(&heredoc);
 	close(p[1]);
+	return (0);
 }
 
 int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
@@ -184,7 +186,7 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	int p[2];
 	t_info	info;
 	t_afterred	red;
-	int		status;
+	//int		status;
 	int		*fd_buf;
 	t_semiherdoc *tmp;
 
@@ -199,27 +201,20 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	fd_buf = NULL;
 	while (cmds[i] != NULL)
 	{
-		//ft_putendl("xxxxx0xxxxxxx");
-		// add a parameter to help close opened file descriptors
-		append_fd_buf(&fd_buf, -1);
+		if (ft_herdocexec(semiherdoc->content))
+			return (1);
+		/*append_fd_buf(&fd_buf, -1);
 		status = 0;
-		//ft_putendl("xxxxx1xxxxxxx");
-		///////////////// * Heredoc * /////////////////
-		
-		ft_herdocexec(semiherdoc->content);
-		
-		///////////////// * Redirections * /////////////////
+
 		red = exec_reds(cmds[i], &status, &fd_buf);
 		if (!red.cmd)
 		{
 			if (status == -1 && !(status = 0))
 			{
-				close_fd_buf(&fd_buf);
+				//close_fd_buf(&fd_buf);
 				break ;
 			}
-		}
-		//ft_putendl("xxxxxxx2xxxxxx");
-		///////////////// * PIPE * /////////////////
+		}*/
 		if (i > 0)
 			ft_inputdone(p[0]);
 		if (cmds[i + 1] != NULL)
@@ -235,12 +230,9 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 			else
 				dup2(f[1], red.fd);
 		}
-		//ft_putendl("xxxxxxx3xxxxxx");
-		///////////////// * PARSE & PUTCMD * /////////////////
-		if (putcmd(red.cmd, cmds, info))
+		if (putcmd(cmds[i], cmds, info))
 			return (1);
-		//ft_putendl("xxxxxx4xxxxxxx");
-		close_fd_buf(&fd_buf);
+		//close_fd_buf(&fd_buf);
 		i++;
 		tmp = semiherdoc;
 		semiherdoc = semiherdoc->next;
@@ -249,6 +241,9 @@ int		ft_putcmd(char *cmd, t_semiherdoc *semiherdoc)
 	dup2(f[1], 1);
 	dup2(f[2], 2);
 	ft_endcmds(cmds, f[0]);
+	close(f[0]);
+	close(f[1]);
+	close(f[2]);
 	return (0);
 }
 
@@ -347,6 +342,7 @@ t_semiherdoc *ft_semiherdoc(char *cmd, char **history, int *status)
 		}
 		i++;
 	}
+	ft_freetable(&sub);
 	sherdoc->next = NULL;
 	return (head);
 }
@@ -400,13 +396,16 @@ void		ft_putherdocs(t_herdoc *herdoc)
 int			ft_putcmds(char **cmd, char **history)
 {
 	int i;
+	char **clone;
 	t_herdoc *herdoc;
 	t_herdoc *head;
 	int status;
 
 	i = 0;
 	status = 0;
-	herdoc = ft_herdoc(cmd, history, &status);
+	clone = ft_tabdup(cmd);
+	herdoc = ft_herdoc(clone, history, &status);
+	ft_freetable(&clone);
 	if (status) // free list
 		return (0);
 	head = herdoc;
@@ -420,6 +419,7 @@ int			ft_putcmds(char **cmd, char **history)
 		head = head->next;
 		free(herdoc);
 	}
+	free(head);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 19:48:06 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/10/15 15:59:29 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 17:13:51 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,14 @@ typedef struct	s_herdoc
 	t_semiherdoc	*semiherdoc;
 	struct s_herdoc *next;
 }				t_herdoc;
+
+
+typedef	struct	s_getlines
+{
+	int i;
+	int p;
+	int f;
+}				t_getlines;
 
 //////////////////////////////////
 

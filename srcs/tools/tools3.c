@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 16:36:59 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/04/22 16:37:50 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:26:22 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ int		ft_skipspaces(char *str)
 
 char	**ft_tabdup(char **array)
 {
-	int i;
-	char **new;
+	int		i;
+	char	**new;
 
 	i = 0;
 	SAFE(new = (char **)malloc(sizeof(char *) * (ft_tablen(array) + 1)));
@@ -50,4 +50,9 @@ int		ft_strisnum(char *str)
 		i++;
 	}
 	return (1);
+}
+
+int		ft_putchr(int c)
+{
+	return (write(2, &c, 1));
 }

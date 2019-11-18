@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 13:51:57 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/27 13:52:31 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:35:22 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void		ft_signal(int x)
 			ft_putchar('\n');
 			ft_prompt();
 		}
-		else {
+		else
+		{
 			ioctl(0, TIOCSTI, "\12");
 			g_input_type = PROMPT;
 		}
@@ -47,7 +48,5 @@ void		ft_signal(int x)
 void		ft_winch(int x)
 {
 	if (x == SIGWINCH && g_pid == 0)
-	{
 		ft_termmanager(g_input, g_cursor);
-	}
 }

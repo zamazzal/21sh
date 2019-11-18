@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 15:15:57 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/22 21:44:31 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:38:12 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		ft_checkpipe(char *cmd)
 
 char	*ft_closepipe(char *cmd, char **history)
 {
-	int		r;
+	int	r;
 	int x;
 
 	g_pipe = 1;

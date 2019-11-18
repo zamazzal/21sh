@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/25 18:50:45 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/04/28 20:14:50 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:35:57 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void			ft_do_bui(char **argv, char *cmd, int rtn)
 		ft_cd(argv);
 }
 
-void		ft_do_cbui(char **argv, char *cmd, int rtn, t_info info)
+void			ft_do_cbui(char **argv, char *cmd, int rtn, t_info info)
 {
 	int argc;
 	int pid;

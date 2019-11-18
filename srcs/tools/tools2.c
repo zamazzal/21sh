@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/27 15:38:55 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/06 15:22:04 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:38:54 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*ft_strdupc(char c)
 
 char	*ft_straddchr(char *str, char c)
 {
-	char *new;
-	int i;
-	int len;
+	char	*new;
+	int		i;
+	int		len;
 
 	if (!str)
 		return (ft_strdupc(c));

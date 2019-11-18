@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 14:01:37 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/06 15:22:40 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 17:20:50 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			ft_getnextpos(char *str, int pos)
 	int i;
 
 	i = pos;
-	while(str[i] != '\0' && !ft_isspace(str[i]))
+	while (str[i] != '\0' && !ft_isspace(str[i]))
 		i++;
 	while (str[i] != '\0' && ft_isspace(str[i]))
 		i++;
@@ -47,7 +47,7 @@ int			ft_getlastpos(char *str, int pos)
 		if (i >= 0 && !ft_isspace(str[i]))
 			return (ft_firstinstr(str, i));
 	}
-	while(i >= 0 && !ft_isspace(str[i]))
+	while (i >= 0 && !ft_isspace(str[i]))
 		i--;
 	while (i >= 0 && ft_isspace(str[i]))
 		i--;
@@ -84,9 +84,9 @@ t_cursor		ft_altl(t_cursor cursor)
 
 t_cursor		ft_altu(t_cursor cursor)
 {
-	struct winsize ts;
-	int prompt;
-	int x;
+	struct winsize	ts;
+	int				prompt;
+	int				x;
 
 	ft_cpy();
 	ts = ft_winsize();
@@ -106,44 +106,55 @@ t_cursor		ft_altu(t_cursor cursor)
 	return (cursor);
 }
 
-int	ft_getlines()
+void	ft_innewline(t_getlines *line, t_cursor *cursor)
 {
-	int i;
-	struct winsize ts;
-	t_cursor cursor;
-	int prompt;
-	int p;
-	int f;
+	(*line).f++;
+	(*cursor).x = 0;
+	(*cursor).y++;
+}
 
-	i = 0;
+int	ft_getlines(void)
+{
+	struct winsize	ts;
+	t_cursor		cursor;
+	int				prompt;
+	t_getlines		line;
+
+	line.i = 0;
 	ts = ft_winsize();
-	f = 1;
+	line.f = 1;
 	prompt = ft_promptlen();
 	cursor = ft_defaultcursor(&cursor);
-	while (g_input[i] != '\0')
+	while (g_input[line.i] != '\0')
 	{
-		p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
-		if (p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
-		{
-			f++;
-			cursor.x = 0;
-			cursor.y++;
-		}
+		line.p = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
+		if (line.p >= ts.ws_col - 1 || g_input[cursor.pos - 1] == '\n')
+			ft_innewline(&line, &cursor);
 		else
 			cursor.x++;
 		cursor.pos++;
-		i++;
+		line.i++;
 	}
-	return (f);
+	return (line.f);
+}
+
+void			ft_calcpos(t_cursor *cursor, int prompt, int *p)
+{
+	(*cursor).pos += ft_getlinelen((*cursor).y) - (*cursor).x;
+	(*cursor).x = ((*cursor).y == 0) ? (*cursor).x + prompt : (*cursor).x;
+	(*cursor).y++;
+	*p = ft_getlinelen((*cursor).y);
+	(*cursor).x = ((*cursor).x > *p) ? *p : (*cursor).x;
+	(*cursor).pos += (*cursor).x + 1;
 }
 
 t_cursor		ft_altd(t_cursor cursor)
 {
-	struct winsize ts;
-	int x;
-	int len;
-	int prompt;
-	int p;
+	struct winsize	ts;
+	int				x;
+	int				len;
+	int				prompt;
+	int				p;
 
 	ts = ft_winsize();
 	len = ft_strlen(g_input);
@@ -152,12 +163,7 @@ t_cursor		ft_altd(t_cursor cursor)
 	ft_cpy();
 	if (cursor.y < x - 1)
 	{
-		cursor.pos += ft_getlinelen(cursor.y) - cursor.x;
-		cursor.x = (cursor.y == 0) ? cursor.x + prompt : cursor.x;
-		cursor.y++;
-		p = ft_getlinelen(cursor.y);
-		cursor.x = (cursor.x > p) ? p : cursor.x;
-		cursor.pos += cursor.x + 1;
+		ft_calcpos(&cursor, prompt, &p);
 		if (cursor.pos > len)
 		{
 			cursor.pos = len;
@@ -193,6 +199,27 @@ t_cursor	ft_autocompletion(t_cursor cursor, char **history)
 	return (cursor);
 }
 
+static t_cursor	moves(t_cursor cursor, int key)
+{
+	if (key == RIGHT)
+		cursor = ft_right(cursor);
+	if (key == LEFT)
+		cursor = ft_left(cursor);
+	if (key == HOME)
+		cursor = ft_home(cursor);
+	if (key == END)
+		cursor = ft_end(cursor);
+	if (key == ALTR)
+		cursor = ft_altr(cursor);
+	if (key == ALTL)
+		cursor = ft_altl(cursor);
+	if (key == ALTU)
+		cursor = ft_altu(cursor);
+	if (key == ALTD)
+		cursor = ft_altd(cursor);
+	return (cursor);
+}
+
 t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 {
 	if (key == ALTF)
@@ -211,24 +238,9 @@ t_cursor	ft_checknoprint(int key, t_cursor cursor, char **history, int *i)
 		cursor = ft_up(i, cursor, history);
 	if (key == DOWN)
 		cursor = ft_down(i, cursor, history);
-	if (key == RIGHT)
-		cursor = ft_right(cursor);
-	if (key == LEFT)
-		cursor = ft_left(cursor);
-	if (key == HOME)
-		cursor = ft_home(cursor);
-	if (key == END)
-		cursor = ft_end(cursor);
-	if (key == ALTR)
-		cursor = ft_altr(cursor);
-	if (key == ALTL)
-		cursor = ft_altl(cursor);
-	if (key == ALTU)
-		cursor = ft_altu(cursor);
-	if (key == ALTD)
-		cursor = ft_altd(cursor);
 	if (key == TAP)
 		cursor = ft_autocompletion(cursor, history);
+	cursor = moves(cursor, key);
 	return (cursor);
 }
 

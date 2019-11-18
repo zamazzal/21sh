@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 13:47:54 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/07/22 21:45:59 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:56:13 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,14 @@ char				*makecmdclear(char *cmd, char **history)
 		if (x == 0 && r == 1)
 			cmd = ft_straddchr(cmd, '\n');
 		if (r == 1)
-		{
 			if (!(cmd = ft_closequotes(cmd, history)))
 				return (NULL);
-		}
 		if (r == 2)
-		{
 			if (!(cmd = ft_closepipe(cmd, history)))
 				return (NULL);
-		}
 		if (r == 3)
-		{
 			if (!(cmd = ft_endbackslash(cmd, history)))
 				return (NULL);
-		}
 		x++;
 	}
 	return (cmd);

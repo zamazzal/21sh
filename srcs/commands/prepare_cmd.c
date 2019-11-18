@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/06 16:17:35 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/06 16:24:52 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/18 16:36:26 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	**ms_expand_args(char **args)
 	return (buffer);
 }
 
-char	*ms_get_arg(char *line)
+char		*ms_get_arg(char *line)
 {
 	int		i;
 	char	*arg;
