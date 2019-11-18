@@ -437,6 +437,8 @@ void			ft_cpy()
 	g_cpy.p2 = -1;
 }
 
+
+
 int				main(void)
 {
 	extern char		**environ;
@@ -446,8 +448,10 @@ int				main(void)
 	signal(SIGINT, ft_signal);
 	signal(SIGWINCH, ft_winch);
 	SAFE(g_environ = creation(environ));
+	ft_memset(g_htable, 0, HTABLE_SIZE);
 	g_input_type = 0;
 	ft_shell();
+	ft_freeh_htab();
 	ft_freetable(&g_environ);
 	return (1);
 }

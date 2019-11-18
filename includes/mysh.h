@@ -41,6 +41,8 @@
 # define ENV 5
 # define EXIT 6
 # define BUFFER_SIZE 8000
+# define HTABLE_SIZE 1000000
+
 
 /*
 **		Keys
@@ -161,6 +163,14 @@ typedef struct	s_pos_tab
 	struct s_pos_tab	*next;
 }				t_pos_tab;
 
+typedef struct s_hashtable
+{
+	char *cmd;
+	char *content;
+	struct s_hashtable *next;
+}				t_hashtable;
+
+
 # define ALNUM "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"
 
 char			**g_environ;
@@ -170,6 +180,7 @@ char			*g_input;
 int				g_pipe;
 t_cursor		g_cursor;
 t_cpy			g_cpy;
+t_hashtable *g_htable[HTABLE_SIZE];
 
 # define PROMPT 1
 # define SQ 39
@@ -412,4 +423,11 @@ void	append_fd_buf(int **fd_buf, int fd);
 void	close_fd_buf(int **fd_buf);
 char	*ms_expand_quotes(char *arg);
 char	*ms_get_arg(char *line);
+
+void			ft_freeh_htab();
+
+
+
+
+unsigned long ft_hash(char *str);
 #endif
