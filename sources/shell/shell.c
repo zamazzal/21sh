@@ -58,7 +58,7 @@ void		ft_shell(void)
 		return ;
 	while (1)
 	{
-		ft_prompt();
+		ft_prompt(1);
 		g_input_type = PROMPT;
 		ft_term_prepare(0);
 		if (!(input = ft_strdup(readline(history))) || parseerror(input, 1))

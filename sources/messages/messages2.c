@@ -12,15 +12,6 @@
 
 #include "mysh.h"
 
-void	ft_prompt(void)
-{
-	char *user;
-
-	user = ft_getenv("USER");
-	ft_putstr("mysh");
-	ft_strequ(user, "root") ? ft_putstr("# ") : ft_putstr("$ ");
-}
-
 void	ft_namerror(char *name)
 {
 	if (name)

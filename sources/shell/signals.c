@@ -31,7 +31,7 @@ void		ft_signal(int x)
 		if (g_input_type == PROMPT)
 		{
 			ft_putchar('\n');
-			ft_prompt();
+			ft_prompt(1);
 		}
 		else
 		{

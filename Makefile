@@ -6,7 +6,7 @@
 #    By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/20 21:54:19 by zamazzal          #+#    #+#              #
-#    Updated: 2019/11/20 21:54:27 by zamazzal         ###   ########.fr        #
+#    Updated: 2019/11/21 00:08:15 by zamazzal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ expansion = 	prepare_cmd.c			\
 
 messages = 		messages1.c				\
 				messages2.c				\
-
+				messages3.c				\
 
 readline = 		autocompletion.c 		\
 				backslash.c				\
@@ -152,57 +152,57 @@ OBJ =	$(addprefix $(builtins_OBJ), $(builtins:.c=.o))			\
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HEADER)
+$(NAME): $(OBJ)
 	@make -C $(LIBFT_PATH)
 	@gcc $(FLAGS) $(OBJ) $(Libft) $(INCLUDES) -o $(NAME) $(TERMCAP)
 	@echo "\x1B[96mBinary File \x1B[90;0m[\x1B[34;1m $(NAME) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(builtins_OBJ)%.o: $(builtins_SRCS)%.c
+$(builtins_OBJ)%.o: $(builtins_SRCS)%.c $(HEADER)
 	@mkdir -p $(builtins_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(execution_OBJ)%.o: $(execution_SRCS)%.c
+$(execution_OBJ)%.o: $(execution_SRCS)%.c $(HEADER)
 	@mkdir -p $(execution_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(expansion_OBJ)%.o: $(expansion_SRCS)%.c
+$(expansion_OBJ)%.o: $(expansion_SRCS)%.c $(HEADER)
 	@mkdir -p $(expansion_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(messages_OBJ)%.o: $(messages_SRCS)%.c
+$(messages_OBJ)%.o: $(messages_SRCS)%.c $(HEADER)
 	@mkdir -p $(messages_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(readline_OBJ)%.o: $(readline_SRCS)%.c
+$(readline_OBJ)%.o: $(readline_SRCS)%.c $(HEADER)
 	@mkdir -p $(readline_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(redirections_OBJ)%.o: $(redirections_SRCS)%.c
+$(redirections_OBJ)%.o: $(redirections_SRCS)%.c $(HEADER)
 	@mkdir -p $(redirections_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(shell_OBJ)%.o: $(shell_SRCS)%.c
+$(shell_OBJ)%.o: $(shell_SRCS)%.c $(HEADER)
 	@mkdir -p $(shell_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(terminal_OBJ)%.o: $(terminal_SRCS)%.c
+$(terminal_OBJ)%.o: $(terminal_SRCS)%.c $(HEADER)
 	@mkdir -p $(terminal_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(tools_OBJ)%.o: $(tools_SRCS)%.c
+$(tools_OBJ)%.o: $(tools_SRCS)%.c $(HEADER)
 	@mkdir -p $(tools_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
 
-$(validation_OBJ)%.o: $(validation_SRCS)%.c
+$(validation_OBJ)%.o: $(validation_SRCS)%.c $(HEADER)
 	@mkdir -p $(validation_OBJ)
 	@gcc -c $(FLAGS) $(INCLUDES) $< -o $@
 	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"

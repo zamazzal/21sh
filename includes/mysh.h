@@ -90,7 +90,7 @@
 # define RS 2
 # define RD 3
 
-# define PROMPTLINE 6
+# define PROMPTLINE ft_prompt(0)
 # define BSPROMPT 2
 # define DQPROMPT 8
 # define QPROMPT 7
@@ -260,7 +260,7 @@ void			ms_set_quote(int *quoted, char *quote, char c);
 **		sources/messages
 */
 
-void			ft_prompt(void);
+int				ft_prompt(int mode);
 void			ft_namerror(char *name);
 void			ft_cmderror(char *cmd);
 void			ft_permerror(char *cmd);
