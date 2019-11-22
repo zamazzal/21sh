@@ -28,9 +28,9 @@ int				main(void)
 	if (ft_tinit() == -1 || ft_checktitty())
 		return (0);
 	signal(SIGINT, ft_signal);
-	signal(SIGWINCH, ft_winch);
 	SAFE(g_environ = creation(environ));
 	ft_memset(g_htable, 0, HTABLE_SIZE);
+	g_pars = 0;
 	g_input_type = 0;
 	ft_shell();
 	ft_freeh_htab();

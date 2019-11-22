@@ -39,7 +39,8 @@ void		append_toclose(t_to_close **head, int fd)
 	curr = *head;
 	if (*head == NULL)
 	{
-		(*head) = (t_to_close *)malloc(sizeof(t_to_close));
+		if (!((*head) = (t_to_close *)malloc(sizeof(t_to_close))))
+			return ;
 		(*head)->fd = fd;
 		(*head)->next = NULL;
 	}
@@ -47,7 +48,8 @@ void		append_toclose(t_to_close **head, int fd)
 	{
 		while (curr->next != NULL)
 			curr = curr->next;
-		curr->next = (t_to_close *)malloc(sizeof(t_to_close));
+		if ((!(curr->next = (t_to_close *)malloc(sizeof(t_to_close)))))
+			return ;
 		curr->next->fd = fd;
 		curr->next->next = NULL;
 	}

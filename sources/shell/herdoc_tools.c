@@ -15,6 +15,7 @@
 char	*get_herdoc_right(char *str)
 {
 	char	*new;
+	char	*tmp;
 	int		i;
 
 	i = 0;
@@ -25,11 +26,13 @@ char	*get_herdoc_right(char *str)
 	while (str[i] != '\0' && (str[i] == 32 || str[i] == '\t'))
 		i++;
 	new = ms_get_arg(&str[i]);
+	tmp = new;
 	new = ms_expand_quotes(new);
+	ft_strdel(&tmp);
 	return (new);
 }
 
-void	ft_freeherdoc(t_herdoc *herdoc)
+int		ft_freeherdoc(t_herdoc *herdoc)
 {
 	t_herdoc		*back1;
 	t_semiherdoc	*back2;
@@ -48,4 +51,5 @@ void	ft_freeherdoc(t_herdoc *herdoc)
 		herdoc = herdoc->next;
 		free(back1);
 	}
+	return (0);
 }

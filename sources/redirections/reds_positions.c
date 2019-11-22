@@ -21,7 +21,8 @@ static void		set_pos_table(t_pos_tab **pos_tab, int pos, int red_type)
 	curr = *pos_tab;
 	if (curr == NULL)
 	{
-		(*pos_tab) = (t_pos_tab *)malloc(sizeof(t_pos_tab));
+		if (!((*pos_tab) = (t_pos_tab *)malloc(sizeof(t_pos_tab))))
+			return ;
 		(*pos_tab)->pos = pos;
 		(*pos_tab)->type = red_type;
 		(*pos_tab)->next = NULL;
@@ -30,7 +31,8 @@ static void		set_pos_table(t_pos_tab **pos_tab, int pos, int red_type)
 	{
 		while (curr->next != NULL)
 			curr = curr->next;
-		curr->next = (t_pos_tab *)malloc(sizeof(t_pos_tab));
+		if (!(curr->next = (t_pos_tab *)malloc(sizeof(t_pos_tab))))
+			return ;
 		curr->next->pos = pos;
 		curr->next->type = red_type;
 		curr->next->next = NULL;

@@ -6,22 +6,20 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 21:40:30 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/20 21:48:45 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:15:03 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mysh.h"
 
-static void	ft_gotonext(int *i, t_to_close **toclose, t_semiherdoc **semiherdoc)
+static void	ft_gotonext(int *i, t_to_close **toclose
+, t_semiherdoc **semiherdoc, char *cmd)
 {
-	t_semiherdoc	*tmp;
-
 	(*i)++;
 	close_toclose(toclose);
 	*toclose = NULL;
-	tmp = (*semiherdoc);
 	*semiherdoc = (*semiherdoc)->next;
-	free(tmp);
+	ft_strdel(&cmd);
 }
 
 static void	ft_initputcmd(int *i, t_info *info
@@ -62,19 +60,19 @@ int			ft_exec_cmd(char **cmds, t_fd fd, t_semiherdoc *semiherdoc)
 	while (cmds[i] != NULL)
 	{
 		if (ft_hdexec(semiherdoc->content) || ft_reds(cmds[i], &toclose, &red))
-			return (1);
+			return (0);
 		ft_firstcmd(i, p[0]);
 		if (cmds[i + 1] != NULL)
 		{
-			if ((p[1] = ft_pipe(&info.fd, red.fd)) == -1)
-				return (1);
+			if ((p[1] = ft_pipe(&info.fd, red.fd, red.cmd)) == -1)
+				return (0);
 			p[0] = info.fd;
 		}
 		else
 			ft_lastpipe(red.fd, fd.f[1]);
 		if (putcmd(red.cmd, cmds, info, &toclose))
 			return (1);
-		ft_gotonext(&i, &toclose, &semiherdoc);
+		ft_gotonext(&i, &toclose, &semiherdoc, red.cmd);
 	}
 	return (0);
 }

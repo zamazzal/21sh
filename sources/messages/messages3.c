@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 00:07:41 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/21 00:10:33 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/21 15:31:21 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static void	ft_showprompt(char *user, char *host, char *path)
 
 static int	ft_getlen(char *user, char *host, char *path)
 {
-	int len;
+	int				len;
+	struct winsize	ts;
 
 	len = 2;
 	if (user)
@@ -73,6 +74,9 @@ static int	ft_getlen(char *user, char *host, char *path)
 		len++;
 	if (path)
 		len += ft_strlen(path);
+	ts = ft_winsize();
+	while (len > ts.ws_col)
+		len -= ts.ws_col;
 	return (len);
 }
 
@@ -85,13 +89,19 @@ int			ft_prompt(int mode)
 
 	user = getuser();
 	host = gethost();
-	path = ft_getenv("PWD");
+	path = ft_strdup(ft_getenv("PWD"));
 	if (mode)
 	{
 		ft_showprompt(user, host, path);
+		ft_strdel(&user);
+		ft_strdel(&host);
+		ft_strdel(&path);
 		ft_putstr(DEFAULT);
 		return (0);
 	}
 	len = ft_getlen(user, host, path);
+	ft_strdel(&user);
+	ft_strdel(&host);
+	ft_strdel(&path);
 	return (len);
 }

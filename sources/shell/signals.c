@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 13:51:57 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/20 16:46:00 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/21 15:31:06 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		ft_cancel(void)
 
 void		ft_signal(int x)
 {
-	if (x == SIGINT && g_pid == 0)
+	if (x == SIGINT && g_pid == 0 && g_pars != -1)
 	{
 		ft_cancel();
 		ft_cpy();
@@ -41,12 +41,6 @@ void		ft_signal(int x)
 		ft_strdel(&g_input);
 		ft_putterm("sc");
 	}
-	if (g_pid == 1)
+	if (g_pid == 1 && g_pars != -1)
 		ft_putchar('\n');
-}
-
-void		ft_winch(int x)
-{
-	if (x == SIGWINCH && g_pid == 0)
-		ft_termmanager(g_input, g_cursor);
 }

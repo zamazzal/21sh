@@ -6,7 +6,7 @@
 /*   By: aihya <aihya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 16:21:17 by aihya             #+#    #+#             */
-/*   Updated: 2019/11/20 18:50:59 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/22 15:00:57 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static void	clean_right(char **right)
 	vc = valid_right_chars(*right);
 	tmp = ft_strsub(*right, 0, vc);
 	if (*right)
+	{
 		free(*right);
+		*right = NULL;
+	}
 	*right = tmp;
 }
 
@@ -32,10 +35,13 @@ static void	clean_left(char **left, int type)
 	vc = valid_left_chars(*left, type);
 	tmp = ft_strsub(*left, ft_strlen(*left) - vc, vc);
 	if (*left)
+	{
 		free(*left);
+		*left = NULL;
+	}
 	if (ft_strlen(tmp) == 0)
 	{
-		free(tmp);
+		ft_strdel(&tmp);
 		*left = NULL;
 	}
 	else
@@ -70,18 +76,22 @@ static void	expand_wing(char **a_wing)
 
 	tmp = ft_strdup(*a_wing);
 	free(*a_wing);
+	*a_wing = NULL;
 	*a_wing = ms_expand_arg(tmp);
-	free(tmp);
+	ft_strdel(&tmp);
 }
 
 void		clean_reds_wings(t_red *reds)
 {
 	t_red	*red;
+	char	*tmp;
 
 	red = reds;
 	while (red)
 	{
-		red->o_left = ft_strdup(red->left);
+		tmp = ft_strdup(red->left);
+		red->o_left = ft_strrev(tmp);
+		ft_strdel(&tmp);
 		red->o_right = ft_strdup(red->right);
 		clean_left(&(red->left), red->type);
 		if (red->left != NULL)

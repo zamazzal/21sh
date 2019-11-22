@@ -84,7 +84,7 @@ int					ft_builtins(char **argv, t_info info)
 
 	if (!argv)
 		return (1);
-	cmd = ft_strdup(argv[0]);
+	cmd = ft_strlwr(ft_strdup(argv[0]));
 	rtn = ft_commands(argv, cmd, info.fd);
 	if (rtn != 0 && rtn != 100)
 	{
@@ -99,9 +99,7 @@ int					ft_builtins(char **argv, t_info info)
 			ft_do_bui(argv, cmd, rtn);
 	}
 	if (rtn == 100)
-	{
 		ft_namerror(cmd);
-	}
 	ft_strdel(&cmd);
 	return (1);
 }

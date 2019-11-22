@@ -71,10 +71,10 @@ t_afterred		exec_reds(char *cmd, int *status, t_to_close **toclose)
 	t_afterred	red;
 
 	red.fd = -1;
-	red.cmd = cmd;
-	reds = extract_reds(cmd);
-	if (reds == NULL)
+	red.cmd = ft_strdup(cmd);
+	if (!(reds = extract_reds(cmd)))
 		return (red);
+	ft_strdel(&red.cmd);
 	clean_reds_wings(reds);
 	curr = reds;
 	red.cmd = get_clean_cmd(cmd, reds);

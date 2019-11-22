@@ -17,6 +17,7 @@ struct winsize	ft_winsize(void)
 	struct winsize ts;
 
 	ioctl(0, TIOCGWINSZ, &ts);
+	ts.ws_col--;
 	return (ts);
 }
 

@@ -44,6 +44,7 @@ int			putcmd(char *cmd, char **cmds, t_info info, t_to_close **toclose)
 	argv = ms_parse(cmd);
 	if (!(ft_builtins(ctables(argv), info)))
 	{
+		ft_strdel(&cmd);
 		ft_freetable(&cmds);
 		ft_freetable(&argv);
 		close_toclose(toclose);

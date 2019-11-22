@@ -104,7 +104,7 @@ char		**get_red_wings(char *cmd, t_pos_tab *node)
 {
 	char **wings;
 
-	wings = (char **)malloc(sizeof(char *) * 3);
+	SAFE(wings = (char **)malloc(sizeof(char *) * 3));
 	if (node->type == LS || node->type == RS)
 	{
 		wings[0] = get_right(cmd, node->pos, 1);

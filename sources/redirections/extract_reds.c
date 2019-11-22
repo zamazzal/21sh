@@ -16,7 +16,7 @@ static t_red	*red_node(t_pos_tab *pos_tab_node, char **wings)
 {
 	t_red *node;
 
-	node = (t_red *)malloc(sizeof(t_red));
+	SAFE(node = (t_red *)malloc(sizeof(t_red)));
 	node->type = pos_tab_node->type;
 	node->right = ft_strdup(wings[0]);
 	node->left = ft_strdup(wings[1]);

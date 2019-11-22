@@ -17,6 +17,7 @@ static char			**herdocreturn(int i, int *status, char **herdoc)
 	if (i == 1)
 	{
 		*status = 1;
+		ft_freetable(&herdoc);
 		return (NULL);
 	}
 	ft_strdel(&g_input);
@@ -38,8 +39,8 @@ static char			**putherdoc(char *str, char **history, int *status)
 		ft_putterm("cr");
 		ft_putstr("heredoc> ");
 		g_input_type = HERDOC;
-		g_input = readline4(history, &i);
-		if (i == 1 || ft_strequ(g_input, str))
+		g_input = readline5(history, &i);
+		if (i == 1 || i == 2 || ft_strequ(g_input, str))
 			break ;
 		herdoc = ft_addtotab(herdoc, g_input);
 		ft_strdel(&g_input);
@@ -63,6 +64,7 @@ static char			**ft_getherd_content(char *cmd, char **history, int *status)
 		if (herdoc)
 			ft_freetable(&herdoc);
 		herdoc = putherdoc(str, history, status);
+		ft_strdel(&str);
 		if (*status)
 			break ;
 	}
@@ -87,7 +89,7 @@ static t_semiherdoc	*ft_semiherdoc(char *cmd, char **history, int *status)
 			break ;
 		if (sub[i + 1] != NULL)
 		{
-			sherdoc->next = (t_semiherdoc*)malloc(sizeof(t_semiherdoc));
+			SAFE(sherdoc->next = (t_semiherdoc*)malloc(sizeof(t_semiherdoc)));
 			sherdoc = sherdoc->next;
 		}
 		i++;

@@ -65,7 +65,7 @@ int				ft_putcmds(char **cmd, char **history)
 	status = 0;
 	herdoc = ft_herdoc(cmd, history, &status);
 	if (status)
-		return (0);
+		return (ft_freeherdoc(herdoc));
 	head = herdoc;
 	while (cmd[i] != NULL)
 	{
@@ -75,10 +75,8 @@ int				ft_putcmds(char **cmd, char **history)
 			return (1);
 		}
 		i++;
-		herdoc = head;
 		head = head->next;
-		free(herdoc);
 	}
-	free(head);
+	ft_freeherdoc(herdoc);
 	return (0);
 }

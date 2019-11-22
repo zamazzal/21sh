@@ -38,9 +38,11 @@ static int	ft_shellexec(char **input, char ***history, char ***cmds)
 	if (!(*input = makecmdclear(*input, *history)))
 		return (1);
 	ft_term_prepare(1);
+	g_pars = -1;
 	*history = ft_addtotab(*history, *input);
 	if (!((*cmds = createcmds(*input))))
 		return (1);
+	g_pars = 0;
 	if (ft_putcmds(*cmds, *history))
 		return (2);
 	ft_endinput(*cmds, *input);

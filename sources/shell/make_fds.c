@@ -12,12 +12,15 @@
 
 #include "mysh.h"
 
-int		ft_pipe(int *fd, int f)
+int		ft_pipe(int *fd, int f, char *cmd)
 {
 	int p[2];
 
 	if (pipe(p) == -1)
+	{
+		ft_strdel(&cmd);
 		return (-1);
+	}
 	*fd = p[0];
 	if (f != -1)
 		dup2(p[1], f);
@@ -44,7 +47,6 @@ int		ft_hdexec(char **heredoc)
 		ft_putendl_fd(heredoc[i], p[1]);
 		i++;
 	}
-	ft_freetable(&heredoc);
 	close(p[1]);
 	return (0);
 }

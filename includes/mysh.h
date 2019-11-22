@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/11 19:48:06 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/11/20 19:47:43 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/11/21 16:10:05 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ t_cpy			g_cpy;
 t_hashtable *g_htable[HTABLE_SIZE];
 char			*g_search;
 char			*g_autoc;
+int				g_pars;
 
 /*
 **		builtins
@@ -331,6 +332,7 @@ int				ft_promptlen(void);
 void			ft_preparereadline(int *i, char **history);
 void			ft_canelwithn(void);
 
+char			*readline5(char **history, int *x);
 char			*readline2(char **history);
 char			*readline3(char **history, int *x);
 char			*readline4(char **history, int *x);
@@ -412,7 +414,7 @@ void			ft_putnstr(char *str, int n);
 **		sources/shell
 */
 
-void			ft_freeherdoc(t_herdoc *herdoc);
+int				ft_freeherdoc(t_herdoc *herdoc);
 char			*get_herdoc_right(char *str);
 void			ft_cancel(void);
 void			ft_signal(int x);
@@ -424,7 +426,7 @@ int				ft_putcmds(char **cmd, char **history);
 int				putcmd(char *cmd, char **cmds
 , t_info info, t_to_close **toclose);
 t_herdoc		*ft_herdoc(char **cmds, char **history, int *status);
-int				ft_pipe(int *fd, int f);
+int				ft_pipe(int *fd, int f, char *cmd);
 int				ft_hdexec(char **heredoc);
 int				ft_reds(char *cmd, t_to_close **toclose, t_afterred *red);
 int				ft_exec_cmd(char **cmds, t_fd fd, t_semiherdoc *semiherdoc);

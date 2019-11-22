@@ -6,7 +6,7 @@
 #    By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/20 21:54:19 by zamazzal          #+#    #+#              #
-#    Updated: 2019/11/21 00:08:15 by zamazzal         ###   ########.fr        #
+#    Updated: 2019/11/21 17:01:27 by zamazzal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ readline = 		autocompletion.c 		\
 				search.c				\
 				select.c				\
 				show_cmd.c				\
+				herdoc_readline.c		\
 
 redirections = 	clean_reds_wings.c		\
 				exec_ls_red.c			\

@@ -85,7 +85,7 @@ char	*ft_strojoin(char **s1, char *s2, int overwrite)
 	if (overwrite)
 	{
 		tmp = ft_strjoin((const char *)(*s1), (const char *)s2);
-		free(*s1);
+		ft_strdel(s1);
 		(*s1) = tmp;
 		return (NULL);
 	}
@@ -99,7 +99,8 @@ void	ft_putintab(char ***a_chain, char *entry)
 	size_t	i;
 
 	size = ft_tablen(*a_chain);
-	new = (char **)malloc(sizeof(char *) * (size + 2));
+	if (!(new = (char **)malloc(sizeof(char *) * (size + 2))))
+		return ;
 	i = 0;
 	while (i < size)
 	{

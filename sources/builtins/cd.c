@@ -69,7 +69,7 @@ static void		ft_goback(char *path)
 	old = getcwd(ft_strnew(1023), BUFFER_SIZE);
 	ft_setenv("OLDPWD", old);
 	ft_entre(now, now);
-	free(now);
+	ft_strdel(&now);
 	extra_free(old, path);
 }
 
