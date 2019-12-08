@@ -6,7 +6,7 @@
 /*   By: zamazzal <zouhir.amazzal@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/28 19:48:38 by zamazzal          #+#    #+#             */
-/*   Updated: 2019/08/08 14:14:36 by zamazzal         ###   ########.fr       */
+/*   Updated: 2019/12/08 18:16:00 by zamazzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,23 @@ static void		ft_goback(char *path)
 	extra_free(old, path);
 }
 
+static	char	*ft_getpath(char *str)
+{
+	char *path;
+
+	path = (!str || ft_strequ(str, "--")) ?
+	ft_strdup(ft_getenv("HOME")) : ft_strdup(str);
+	return (path);
+}
+
 void			ft_cd(char **argv)
 {
 	char *path;
 	char *old;
 	char *now;
 
-	path = (!argv[1] || ft_strequ(argv[1], "--")) ?
-	ft_strdup(ft_getenv("HOME")) : ft_strdup(argv[1]);
+	if (!(path = ft_getpath(argv[1])))
+		return ;
 	if (ft_strequ(path, "-"))
 	{
 		ft_goback(path);
